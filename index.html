@@ -1,0 +1,2398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TryHackMe — 800+ Complete Labs Directory</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050a0e;
+      --bg2: #080f14;
+      --bg3: #0d1821;
+      --panel: #0a1520;
+      --border: #0e3a52;
+      --border2: #1a5a7a;
+      --green: #00ff88;
+      --cyan: #00d4ff;
+      --blue: #0088ff;
+      --orange: #ff8800;
+      --red: #ff3355;
+      --yellow: #ffdd00;
+      --purple: #aa55ff;
+      --text: #c8e6f0;
+      --text2: #6a9ab0;
+      --text3: #3a6a80;
+      --glow-green: 0 0 20px rgba(0, 255, 136, 0.4);
+      --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* Grid background */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(180deg, rgba(0, 20, 35, 0.98) 0%, rgba(5, 10, 14, 0.95) 100%);
+      border-bottom: 1px solid var(--border2);
+      padding: 40px 0 30px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .made-by {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      background: rgba(0, 212, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-radius: 6px;
+      padding: 6px 14px;
+      animation: creditGlow 3s ease-in-out infinite;
+      white-space: nowrap;
+      align-self: flex-start;
+    }
+
+    @keyframes creditGlow {
+
+      0%,
+      100% {
+        color: var(--cyan);
+        border-color: rgba(0, 212, 255, 0.3);
+        text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+      }
+
+      50% {
+        color: var(--green);
+        border-color: rgba(0, 255, 136, 0.4);
+        text-shadow: 0 0 12px rgba(0, 255, 136, 0.7);
+      }
+    }
+
+    @keyframes logoGlow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.7), 0 0 30px rgba(0, 212, 255, 0.4), 0 0 60px rgba(0, 212, 255, 0.2);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.8), 0 0 40px rgba(0, 255, 136, 0.5), 0 0 80px rgba(0, 255, 136, 0.3);
+      }
+    }
+
+    @keyframes logoPulse {
+
+      0%,
+      100% {
+        filter: brightness(1) drop-shadow(0 0 8px rgba(0, 212, 255, 0.8));
+      }
+
+      50% {
+        filter: brightness(1.15) drop-shadow(0 0 12px rgba(0, 255, 136, 0.9));
+      }
+    }
+
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      background: transparent;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      animation: logoGlow 2.5s ease-in-out infinite;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .logo-icon img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 12px;
+      animation: logoPulse 2.5s ease-in-out infinite;
+    }
+
+    h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(18px, 3vw, 32px);
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--green) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      letter-spacing: 2px;
+      animation: shimmer 4s ease-in-out infinite;
+      background-size: 200% auto;
+    }
+
+    @keyframes shimmer {
+
+      0%,
+      100% {
+        background-position: 0% center;
+      }
+
+      50% {
+        background-position: 200% center;
+      }
+    }
+
+    .subtitle {
+      color: var(--text2);
+      font-size: 13px;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 1px;
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .stat-pill {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .stat-pill:hover {
+      border-color: var(--cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .stat-num {
+      color: var(--cyan);
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .stat-free .stat-num {
+      color: var(--green);
+    }
+
+    .stat-premium .stat-num {
+      color: var(--orange);
+    }
+
+    /* SEARCH & FILTERS */
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .search-wrap::before {
+      content: '⌕';
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--cyan);
+      font-size: 18px;
+      z-index: 1;
+    }
+
+    #searchInput {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 10px 14px 10px 40px;
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    #searchInput:focus {
+      border-color: var(--cyan);
+      box-shadow: var(--glow-cyan);
+      background: var(--bg3);
+    }
+
+    #searchInput::placeholder {
+      color: var(--text3);
+    }
+
+    .filter-btn {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 16px;
+      color: var(--text2);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: var(--glow-cyan);
+      background: rgba(0, 212, 255, 0.08);
+    }
+
+    .filter-btn.free-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: var(--glow-green);
+      background: rgba(0, 255, 136, 0.08);
+    }
+
+    .filter-btn.premium-btn.active {
+      border-color: var(--orange);
+      color: var(--orange);
+      box-shadow: 0 0 20px rgba(255, 136, 0, 0.4);
+      background: rgba(255, 136, 0, 0.08);
+    }
+
+    .filter-btn.easy-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: var(--glow-green);
+      background: rgba(0, 255, 136, 0.08);
+    }
+
+    .filter-btn.medium-btn.active {
+      border-color: var(--yellow);
+      color: var(--yellow);
+      box-shadow: 0 0 20px rgba(255, 221, 0, 0.4);
+      background: rgba(255, 221, 0, 0.08);
+    }
+
+    .filter-btn.hard-btn.active {
+      border-color: var(--red);
+      color: var(--red);
+      box-shadow: 0 0 20px rgba(255, 51, 85, 0.4);
+      background: rgba(255, 51, 85, 0.08);
+    }
+
+    .filter-btn.insane-btn.active {
+      border-color: var(--purple);
+      color: var(--purple);
+      box-shadow: 0 0 20px rgba(170, 85, 255, 0.5);
+      background: rgba(170, 85, 255, 0.1);
+    }
+
+    /* MAIN */
+    main {
+      padding: 30px 0;
+    }
+
+    /* CATEGORY SECTIONS */
+    .category-section {
+      margin-bottom: 40px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg2);
+      transition: all 0.3s;
+    }
+
+    .category-section:hover {
+      border-color: var(--border2);
+    }
+
+    .category-header {
+      background: linear-gradient(90deg, var(--panel) 0%, rgba(0, 212, 255, 0.05) 100%);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .category-header:hover {
+      background: linear-gradient(90deg, var(--bg3) 0%, rgba(0, 212, 255, 0.08) 100%);
+    }
+
+    .cat-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .cat-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 1px;
+    }
+
+    .cat-desc {
+      font-size: 12px;
+      color: var(--text3);
+      font-family: 'Share Tech Mono', monospace;
+      margin-top: 2px;
+    }
+
+    .cat-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cat-count {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid var(--border2);
+      color: var(--cyan);
+    }
+
+    .cat-toggle {
+      color: var(--text3);
+      font-size: 18px;
+      transition: transform 0.3s;
+      user-select: none;
+    }
+
+    .category-section.collapsed .cat-toggle {
+      transform: rotate(-90deg);
+    }
+
+    /* TABLE */
+    .table-wrap {
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+      transition: max-height 0.4s ease;
+    }
+
+    .category-section.collapsed .table-wrap {
+      max-height: 0;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    thead tr {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border2);
+    }
+
+    th {
+      padding: 12px 16px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: left;
+      font-weight: normal;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(14, 58, 82, 0.4);
+      transition: all 0.15s;
+    }
+
+    tbody tr:hover {
+      background: rgba(0, 212, 255, 0.04);
+      border-color: rgba(0, 212, 255, 0.2);
+    }
+
+    tbody tr.hidden {
+      display: none;
+    }
+
+    td {
+      padding: 10px 16px;
+      vertical-align: middle;
+    }
+
+    .td-num {
+      color: var(--text3);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      width: 40px;
+    }
+
+    .td-name a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .td-name a:hover {
+      color: var(--cyan);
+      text-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
+    }
+
+    .td-name a::before {
+      content: '→';
+      color: var(--border2);
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .td-name a:hover::before {
+      color: var(--cyan);
+      transform: translateX(3px);
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-family: 'Share Tech Mono', monospace;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .badge-free {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      color: var(--green);
+    }
+
+    .badge-premium {
+      background: rgba(255, 136, 0, 0.12);
+      border: 1px solid rgba(255, 136, 0, 0.35);
+      color: var(--orange);
+    }
+
+    .badge-uncertain {
+      background: rgba(170, 85, 255, 0.1);
+      border: 1px solid rgba(170, 85, 255, 0.3);
+      color: var(--purple);
+    }
+
+    .diff {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: 'Share Tech Mono', monospace;
+      white-space: nowrap;
+    }
+
+    .diff-info {
+      background: rgba(0, 136, 255, 0.1);
+      border: 1px solid rgba(0, 136, 255, 0.3);
+      color: var(--blue);
+    }
+
+    .diff-easy {
+      background: rgba(0, 255, 136, 0.08);
+      border: 1px solid rgba(0, 255, 136, 0.25);
+      color: var(--green);
+    }
+
+    .diff-medium {
+      background: rgba(255, 221, 0, 0.08);
+      border: 1px solid rgba(255, 221, 0, 0.25);
+      color: var(--yellow);
+    }
+
+    .diff-hard {
+      background: rgba(255, 51, 85, 0.1);
+      border: 1px solid rgba(255, 51, 85, 0.3);
+      color: var(--red);
+    }
+
+    .diff-insane {
+      background: rgba(170, 85, 255, 0.1);
+      border: 1px solid rgba(170, 85, 255, 0.3);
+      color: var(--purple);
+    }
+
+    /* RESULT COUNT */
+    .result-bar {
+      margin-bottom: 20px;
+      padding: 12px 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .result-bar .highlight {
+      color: var(--cyan);
+      font-weight: bold;
+    }
+
+    /* LEGEND */
+    .legend {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      padding-bottom: 40px;
+    }
+
+    .legend-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .legend-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: var(--text2);
+    }
+
+    /* BACK TO TOP */
+    .back-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 46px;
+      height: 46px;
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--cyan);
+      font-size: 20px;
+      transition: all 0.2s;
+      z-index: 200;
+      box-shadow: var(--glow-cyan);
+      text-decoration: none;
+    }
+
+    .back-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+    }
+
+    /* No results */
+    .no-results {
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--text3);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      display: none;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--cyan);
+    }
+
+    /* =============================
+       RESPONSIVE — TABLET (≤900px)
+       ============================= */
+    @media (max-width: 900px) {
+      h1 {
+        font-size: clamp(14px, 4vw, 24px);
+      }
+
+      .legend {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* =============================
+       RESPONSIVE — MOBILE (≤768px)
+       ============================= */
+    @media (max-width: 768px) {
+
+      /* Header stacks vertically */
+      header {
+        padding: 16px 0 12px;
+        position: relative;
+        /* not sticky on mobile — avoids header eating half screen */
+      }
+
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .header-left {
+        gap: 12px;
+        width: 100%;
+      }
+
+      .made-by {
+        align-self: flex-start;
+        font-size: 10px;
+        padding: 4px 10px;
+      }
+
+      h1 {
+        font-size: clamp(13px, 5vw, 22px);
+        letter-spacing: 1px;
+      }
+
+      .subtitle {
+        font-size: 10px;
+        letter-spacing: 0;
+      }
+
+      /* Logo smaller on mobile */
+      .logo-icon,
+      .header-logo-container svg,
+      .header-logo-container img {
+        width: 46px !important;
+        height: 46px !important;
+      }
+
+      /* Stats bar — wrap into 2 columns */
+      .stats-bar {
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .stat-pill {
+        font-size: 11px;
+        padding: 5px 10px;
+        flex: 1 1 calc(50% - 8px);
+        justify-content: center;
+      }
+
+      /* Controls — filter buttons horizontal scroll row */
+      .controls {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .search-wrap {
+        min-width: 100%;
+        width: 100%;
+      }
+
+      /* Filter buttons: single scrollable row instead of column */
+      .controls>.filter-btn,
+      .controls>button {
+        flex-shrink: 0;
+      }
+
+      /* Wrap filter buttons in a scrollable row */
+      .controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .controls .search-wrap {
+        flex: 1 1 100%;
+        order: -1;
+      }
+
+      .filter-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        flex: 0 1 auto;
+        min-width: fit-content;
+        text-align: center;
+      }
+
+      /* Category header */
+      .cat-desc {
+        display: none;
+      }
+
+      .cat-title {
+        font-size: 12px;
+      }
+
+      .cat-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+      }
+
+      .cat-count {
+        font-size: 10px;
+        padding: 3px 8px;
+      }
+
+      /* Table — hide # column, shrink padding */
+      .td-num {
+        display: none;
+      }
+
+      td,
+      th {
+        padding: 8px 10px;
+      }
+
+      th:first-child {
+        display: none;
+      }
+
+      /* Room name links smaller */
+      .td-name a {
+        font-size: 13px;
+      }
+
+      /* Badges smaller */
+      .badge,
+      .diff {
+        font-size: 10px;
+        padding: 2px 7px;
+      }
+
+      /* Result bar wraps */
+      .result-bar {
+        flex-wrap: wrap;
+        font-size: 11px;
+        padding: 8px 14px;
+        gap: 6px;
+      }
+
+      /* Legend single column */
+      .legend {
+        grid-template-columns: 1fr;
+        margin-top: 24px;
+      }
+
+      /* Main padding reduced */
+      main {
+        padding: 16px 0;
+      }
+
+      .container {
+        padding: 0 12px;
+      }
+
+      /* No results message */
+      .no-results {
+        font-size: 12px;
+        padding: 30px 10px;
+      }
+
+      /* Back to top — better thumb position */
+      .back-top {
+        bottom: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+
+      /* Table max-height relaxed */
+      .table-wrap {
+        max-height: none;
+      }
+    }
+
+    /* =============================
+       RESPONSIVE — SMALL (≤480px)
+       ============================= */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: clamp(12px, 4.5vw, 18px);
+        letter-spacing: 0.5px;
+      }
+
+      .stat-pill {
+        font-size: 10px;
+        padding: 4px 8px;
+        flex: 1 1 calc(50% - 6px);
+      }
+
+      /* Show only room name and access badge on tiny screens */
+      .td-name a {
+        font-size: 12px;
+        gap: 4px;
+      }
+
+      .td-name a::before {
+        display: none;
+      }
+
+      .filter-btn {
+        font-size: 11px;
+        padding: 7px 10px;
+      }
+
+      .category-header {
+        padding: 12px 14px;
+      }
+
+      .cat-right {
+        gap: 6px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <div class="header-top">
+        <div class="header-left">
+          <!-- LOGO -->
+          <div class="header-logo-container">
+            <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"
+              style="border-radius:14px;display:block;">
+              <defs>
+                <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#1de9b6;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#1565c0;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#1565c0;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <!-- Background -->
+              <rect width="60" height="60" rx="14" fill="url(#bgGrad)" />
+              <!-- Shield body -->
+              <path d="M30 10 L46 17 L46 32 C46 42 30 52 30 52 C30 52 14 42 14 32 L14 17 Z" fill="url(#shieldGrad)"
+                stroke="#90caf9" stroke-width="1" />
+              <!-- Shield inner highlight -->
+              <path d="M30 15 L42 21 L42 32 C42 40 30 48 30 48 C30 48 18 40 18 32 L18 21 Z"
+                fill="rgba(255,255,255,0.12)" />
+            </svg>
+          </div>
+          <div>
+            <h1>TRYHACKME — COMPLETE LABS DIRECTORY</h1>
+            <div class="subtitle">// 800+ ROOMS · FREE &amp; PREMIUM · ORGANIZED BY DOMAIN · MARCH 2026</div>
+          </div>
+        </div>
+        <div class="made-by">// made by The4v1</div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-pill"><span class="stat-num" id="totalCount">1050+</span> Total Labs</div>
+        <div class="stat-pill stat-free"><span class="stat-num" id="freeCount">950+</span> ✅ FREE</div>
+        <div class="stat-pill stat-premium"><span class="stat-num" id="premiumCount">100+</span> 💎 PREMIUM</div>
+        <div class="stat-pill"><span class="stat-num">31</span> Categories</div>
+        <div class="stat-pill"><span class="stat-num" id="visibleCount">—</span> Showing</div>
+      </div>
+
+      <div class="controls">
+        <div class="search-wrap">
+          <input type="text" id="searchInput" placeholder="Search rooms, CVEs, tools, techniques..." autocomplete="off">
+        </div>
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn free-btn" data-filter="free">✅ Free</button>
+        <button class="filter-btn premium-btn" data-filter="premium">💎 Premium</button>
+        <button class="filter-btn easy-btn" data-filter="easy">🟢 Easy</button>
+        <button class="filter-btn medium-btn" data-filter="medium">🟡 Medium</button>
+        <button class="filter-btn hard-btn" data-filter="hard">🔴 Hard</button>
+        <button class="filter-btn insane-btn" data-filter="insane">💀 Insane</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="result-bar">
+        <span>⚡ LIVE DIRECTORY</span>
+        <span>·</span>
+        <span>Showing <span class="highlight" id="resultInfo">all labs</span></span>
+        <span>·</span>
+        <span>Links → <span class="highlight">tryhackme.com/room/</span></span>
+        <span>·</span>
+        <span>⚠️ Verify access status on site as it may change</span>
+      </div>
+
+      <div id="noResults" class="no-results">
+        ⚠️ No labs found matching your search. Try different keywords.
+      </div>
+
+      <!-- CATEGORIES RENDERED BY JS -->
+      <div id="labsContainer"></div>
+
+      <div class="legend">
+        <div class="legend-card">
+          <div class="legend-title">// Difficulty Levels</div>
+          <div class="legend-item"><span class="diff diff-info">🔵 INFO</span> Educational only, no hacking</div>
+          <div class="legend-item"><span class="diff diff-easy">🟢 EASY</span> Beginner-friendly</div>
+          <div class="legend-item"><span class="diff diff-medium">🟡 MEDIUM</span> Requires exploit skills</div>
+          <div class="legend-item"><span class="diff diff-hard">🔴 HARD</span> Advanced techniques</div>
+          <div class="legend-item"><span class="diff diff-insane">💀 INSANE</span> Expert only</div>
+        </div>
+        <div class="legend-card">
+          <div class="legend-title">// Access Types</div>
+          <div class="legend-item"><span class="badge badge-free">✅ FREE</span> No subscription needed</div>
+          <div class="legend-item"><span class="badge badge-premium">💎 PREMIUM</span> ~$14/month subscription</div>
+          <div class="legend-item"><span class="badge badge-uncertain">⚠️ FREE*</span> Status uncertain — verify on site
+          </div>
+        </div>
+        <div class="legend-card">
+          <div class="legend-title">// Quick Tips</div>
+          <div class="legend-item">🔍 Use search to find any room instantly</div>
+          <div class="legend-item">🎯 Filter by access type or difficulty</div>
+          <div class="legend-item">📂 Click category header to collapse/expand</div>
+          <div class="legend-item">🔗 All room links are clickable</div>
+          <div class="legend-item">📌 Source: TryHackMe Official + Community Lists</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <a href="#" class="back-top" title="Back to top">↑</a>
+
+  <script>
+    const CATEGORIES = [
+      {
+        id: "intro",
+        icon: "🚪",
+        title: "INTRO & WELCOME ROOMS",
+        desc: "Start here — perfect for absolute beginners",
+        color: "#00d4ff",
+        rooms: [
+          { name: "Welcome", slug: "hello", access: "free", diff: "info" },
+          { name: "Tutorial", slug: "tutorial", access: "free", diff: "info" },
+          { name: "How to use TryHackMe", slug: "howtousetryhackme", access: "free", diff: "info" },
+          { name: "OpenVPN", slug: "openvpn", access: "free", diff: "info" },
+          { name: "Learning Cyber Security", slug: "beginnerpathintro", access: "free", diff: "easy" },
+          { name: "Starting Out In Cyber Sec", slug: "startingoutincybersec", access: "free", diff: "easy" },
+          { name: "Introductory Researching", slug: "introtoresearch", access: "free", diff: "easy" },
+          { name: "Regular Expressions", slug: "catregex", access: "free", diff: "easy" },
+          { name: "Careers in Cyber", slug: "careersincyber", access: "free", diff: "info" },
+          { name: "Junior Security Analyst Intro", slug: "jrsecanalystintrouxo", access: "free", diff: "easy" },
+          { name: "Security Engineer Intro", slug: "securityengineerintro", access: "free", diff: "easy" },
+          { name: "Security Principles", slug: "securityprinciples", access: "free", diff: "easy" },
+          { name: "Intro to Docker", slug: "introtodockerk8pdqk", access: "free", diff: "easy" },
+          { name: "SDLC", slug: "sdlc", access: "free", diff: "easy" },
+          { name: "Hosted Hypervisors", slug: "hostedhypervisors", access: "free", diff: "easy" },
+          { name: "Hypervisor Internals", slug: "hypervisorinternals", access: "free", diff: "easy" },
+          { name: "Intro to Logs", slug: "introtologs", access: "free", diff: "easy" },
+          { name: "Preparation", slug: "preparation", access: "free", diff: "easy" },
+          { name: "Pentesting Fundamentals", slug: "pentestingfundamentals", access: "free", diff: "easy" },
+          { name: "Principles of Security", slug: "principlesofsecurity", access: "free", diff: "easy" },
+          { name: "The Hacker Methodology", slug: "hackermethodology", access: "free", diff: "easy" },
+          { name: "Physical Security Intro", slug: "physicalsecurityintro", access: "free", diff: "easy" },
+          { name: "Intro to Threat Emulation", slug: "threatemulationintro", access: "free", diff: "easy" },
+          { name: "Threat Hunting: Introduction", slug: "introductiontothreathunting", access: "free", diff: "easy" },
+          { name: "Threat Hunting: Foothold", slug: "threathuntingfoothold", access: "free", diff: "medium" },
+          { name: "Web Application Basics", slug: "webapplicationbasics", access: "free", diff: "easy" },
+          { name: "Networking Concepts", slug: "networkingconcepts", access: "free", diff: "easy" },
+          { name: "SOC Fundamentals", slug: "socfundamentals", access: "free", diff: "easy" },
+          { name: "CyberChef: The Basics", slug: "cyberchefbasics", access: "free", diff: "easy" },
+          { name: "Cryptography Basics", slug: "cryptographybasics", access: "free", diff: "easy" },
+          { name: "Search Skills", slug: "searchskills", access: "free", diff: "easy" },
+          { name: "Windows Command Line", slug: "windowscommandline", access: "free", diff: "easy" },
+          { name: "x86 Architecture Overview", slug: "x8664arch", access: "free", diff: "easy" },
+          { name: "UltraTech", slug: "ultratech1", access: "free", diff: "medium" },
+        ]
+      },
+      {
+        id: "linux",
+        icon: "🐧",
+        title: "LINUX FUNDAMENTALS",
+        desc: "Linux — the foundation of hacking",
+        color: "#ff8800",
+        rooms: [
+          { name: "Linux Fundamentals Part 1", slug: "linuxfundamentalspart1", access: "free", diff: "easy" },
+          { name: "Linux Fundamentals Part 2", slug: "linuxfundamentalspart2", access: "premium", diff: "easy" },
+          { name: "Linux Fundamentals Part 3", slug: "linuxfundamentalspart3", access: "premium", diff: "easy" },
+          { name: "Linux Modules", slug: "linuxmodules", access: "free", diff: "easy" },
+          { name: "Linux Strength Training", slug: "linuxstrengthtraining", access: "free", diff: "easy" },
+          { name: "Linux File System Analysis", slug: "linuxfilesystemanalysis", access: "free", diff: "easy" },
+          { name: "Linux Process Analysis", slug: "linuxprocessanalysis", access: "free", diff: "easy" },
+          { name: "Linux Incident Surface", slug: "linuxincidentsurface", access: "free", diff: "easy" },
+          { name: "Linux Server Forensics", slug: "linuxserverforensics", access: "free", diff: "medium" },
+          { name: "Linux Backdoors", slug: "linuxbackdoors", access: "free", diff: "medium" },
+          { name: "Linux Function Hooking", slug: "linuxfunctionhooking", access: "free", diff: "medium" },
+          { name: "Linux Agency", slug: "linuxagency", access: "free", diff: "medium" },
+          { name: "Linux Privilege Escalation", slug: "linprivesc", access: "free", diff: "medium" },
+          { name: "Linux PrivEsc", slug: "linuxprivesc", access: "free", diff: "easy" },
+          { name: "Linux PrivEsc Arena", slug: "linuxprivescarena", access: "free", diff: "medium" },
+          { name: "Linux System Hardening", slug: "linuxsystemhardening", access: "premium", diff: "medium" },
+        ]
+      },
+      {
+        id: "windows",
+        icon: "🪟",
+        title: "WINDOWS FUNDAMENTALS",
+        desc: "Windows internals, privilege escalation and forensics",
+        color: "#0088ff",
+        rooms: [
+          { name: "Windows Fundamentals 1", slug: "windowsfundamentals1xbx", access: "free", diff: "easy" },
+          { name: "Windows Fundamentals 2", slug: "windowsfundamentals2x0x", access: "free", diff: "easy" },
+          { name: "Windows Fundamentals 3", slug: "windowsfundamentals3xzx", access: "free", diff: "easy" },
+          { name: "Windows PrivEsc", slug: "windows10privesc", access: "free", diff: "medium" },
+          { name: "Windows PrivEsc Arena", slug: "windowsprivescarena", access: "free", diff: "medium" },
+          { name: "Investigating Windows", slug: "investigatingwindows", access: "free", diff: "easy" },
+          { name: "Investigating Windows 2.0", slug: "investigatingwindows2", access: "free", diff: "medium" },
+          { name: "Investigating Windows 3.x", slug: "investigatingwindows3", access: "free", diff: "medium" },
+          { name: "Windows Incident Surface", slug: "winincidentsurface", access: "free", diff: "easy" },
+          { name: "Registry Persistence Detection", slug: "registrypersistencedetection", access: "free", diff: "easy" },
+          { name: "Windows Applications Forensics", slug: "windowsapplications", access: "free", diff: "easy" },
+          { name: "Windows API Introduction", slug: "windowsapi", access: "premium", diff: "medium" },
+          { name: "Windows Internals", slug: "windowsinternals", access: "premium", diff: "medium" },
+          { name: "Windows Local Persistence", slug: "windowslocalpersistence", access: "premium", diff: "medium" },
+          { name: "Abusing Windows Internals", slug: "abusingwindowsinternals", access: "premium", diff: "hard" },
+          { name: "Windows Reversing Intro", slug: "windowsreversingintro", access: "free", diff: "easy" },
+          { name: "Windows x64 Assembly", slug: "win64assembly", access: "free", diff: "medium" },
+          { name: "Hacking with PowerShell", slug: "powershell", access: "free", diff: "medium" },
+        ]
+      },
+      {
+        id: "web",
+        icon: "🌐",
+        title: "WEB HACKING & APPLICATION SECURITY",
+        desc: "SQLi, XSS, SSRF, LFI, RFI, CSRF — complete web hacking arsenal",
+        color: "#00ff88",
+        rooms: [
+          { name: "OWASP Top 10", slug: "owasptop10", access: "free", diff: "easy" },
+          { name: "OWASP Top 10 - 2021", slug: "owasptop102021", access: "free", diff: "easy" },
+          { name: "OWASP Juice Shop", slug: "owaspjuiceshop", access: "free", diff: "easy" },
+          { name: "OWASP Mutillidae II", slug: "owaspmutillidae", access: "free", diff: "medium" },
+          { name: "OWASP Broken Access Control", slug: "owaspbrokenaccesscontrol", access: "free", diff: "easy" },
+          { name: "WebGOAT", slug: "webgoat", access: "free", diff: "medium" },
+          { name: "DVWA", slug: "dvwa", access: "free", diff: "easy" },
+          { name: "Web Application Security", slug: "introwebapplicationsecurity", access: "free", diff: "easy" },
+          { name: "Web Application Basics", slug: "webapplicationbasics", access: "free", diff: "easy" },
+          { name: "Walking An Application", slug: "walkinganapplication", access: "uncertain", diff: "easy" },
+          { name: "How Websites Work", slug: "howwebsiteswork", access: "free", diff: "easy" },
+          { name: "HTTP in Detail", slug: "httpindetail", access: "free", diff: "easy" },
+          { name: "Putting It All Together", slug: "puttingitalltogether", access: "free", diff: "easy" },
+          { name: "SQL Injection", slug: "sqlinjectionlm", access: "free", diff: "easy" },
+          { name: "SQL Injection Lab", slug: "sqlilab", access: "free", diff: "medium" },
+          { name: "Advanced SQL Injection", slug: "advancedsqlinjection", access: "free", diff: "medium" },
+          { name: "NoSQL Injection", slug: "nosqlinjectiontutorial", access: "free", diff: "medium" },
+          { name: "SQHell", slug: "sqhell", access: "free", diff: "medium" },
+          { name: "XSS (Cross-Site Scripting)", slug: "axss", access: "free", diff: "easy" },
+          { name: "CSRF", slug: "csrfV2", access: "free", diff: "easy" },
+          { name: "SSRF", slug: "ssrfhr", access: "free", diff: "easy" },
+          { name: "SSTI (Server Side Template Injection)", slug: "learnssti", access: "free", diff: "medium" },
+          { name: "File Inclusion & Path Traversal", slug: "filepathtraversal", access: "free", diff: "medium" },
+          { name: "HTTP Request Smuggling", slug: "httprequestsmuggling", access: "free", diff: "hard" },
+          { name: "HTTP/2 Request Smuggling", slug: "http2requestsmuggling", access: "free", diff: "hard" },
+          { name: "Upload Vulnerabilities", slug: "uploadvulns", access: "free", diff: "easy" },
+          { name: "Authentication Bypass", slug: "authenticationbypass", access: "free", diff: "easy" },
+          { name: "IDOR", slug: "idor", access: "free", diff: "easy" },
+          { name: "Content Discovery", slug: "contentdiscovery", access: "free", diff: "easy" },
+          { name: "Subdomain Enumeration", slug: "subdomainenumeration", access: "free", diff: "easy" },
+          { name: "Vulnerabilities 101", slug: "vulnerabilities101", access: "free", diff: "easy" },
+          { name: "Enumeration & Brute Force", slug: "enumerationbruteforce", access: "free", diff: "easy" },
+          { name: "Race Conditions", slug: "raceconditions", access: "free", diff: "medium" },
+          { name: "Microservices Architectures", slug: "microservicearchitectures", access: "free", diff: "medium" },
+          { name: "VulnNet", slug: "vulnnet1", access: "free", diff: "medium" },
+          { name: "Juicy Details", slug: "juicydetails", access: "free", diff: "easy" },
+          { name: "Vulnversity", slug: "vulnversity", access: "free", diff: "easy" },
+          { name: "Basic Pentesting", slug: "basicpentestingjt", access: "free", diff: "easy" },
+          { name: "Burp Suite: The Basics", slug: "burpsuitebasics", access: "free", diff: "easy" },
+          { name: "Burp Suite: Repeater", slug: "burpsuiterepeater", access: "free", diff: "easy" },
+          { name: "Burp Suite: Intruder", slug: "burpsuiteintruder", access: "premium", diff: "easy" },
+          { name: "Burp Suite: Other Modules", slug: "burpsuiteom", access: "premium", diff: "easy" },
+          { name: "Burp Suite: Extensions", slug: "burpsuiteextensions", access: "premium", diff: "easy" },
+          { name: "Introduction to OWASP ZAP", slug: "learnowaspzap", access: "free", diff: "easy" },
+          { name: "Ignite", slug: "ignite", access: "free", diff: "easy" },
+          { name: "Overpass", slug: "overpass", access: "free", diff: "easy" },
+          { name: "Jack-of-All-Trades", slug: "jackofalltrades", access: "free", diff: "easy" },
+          { name: "Bolt", slug: "bolt", access: "free", diff: "easy" },
+          { name: "Year of the Rabbit", slug: "yearoftherabbit", access: "free", diff: "easy" },
+          { name: "Develpy", slug: "bsidesgtdevelpy", access: "free", diff: "medium" },
+          { name: "Git Happens", slug: "githappens", access: "free", diff: "easy" },
+          { name: "Introduction to Django", slug: "django", access: "free", diff: "easy" },
+          { name: "Introduction to Flask", slug: "flask", access: "free", diff: "easy" },
+          { name: "Hip Flask", slug: "hipflask", access: "free", diff: "medium" },
+          { name: "Bypass Disable Functions", slug: "bypassdisablefunctions", access: "free", diff: "medium" },
+          { name: "The Marketplace", slug: "marketplace", access: "free", diff: "medium" },
+          { name: "Blog (WordPress CTF)", slug: "blog", access: "free", diff: "medium" },
+          { name: "Bookstore", slug: "bookstoreoc", access: "free", diff: "medium" },
+          { name: "NahamStore", slug: "nahamstore", access: "free", diff: "medium" },
+          { name: "CMSpit", slug: "cmspit", access: "free", diff: "medium" },
+          { name: "Wekor", slug: "wekorra", access: "free", diff: "medium" },
+          { name: "ParrotPost: Phishing Analysis", slug: "parrotpost", access: "free", diff: "easy" },
+          { name: "Insecure Randomness", slug: "insecurerandomness", access: "free", diff: "medium" },
+          { name: "Bypass Really Simple Security", slug: "bypassreallysimplesecurity", access: "free", diff: "medium" },
+          { name: "Writing Pentest Reports", slug: "writingpentestreports", access: "free", diff: "easy" },
+          { name: "Wordpress: CVE-2021-29447", slug: "wordpresscve202129447", access: "free", diff: "easy" },
+          { name: "Rabbit Store", slug: "rabbitstore", access: "free", diff: "medium" },
+          { name: "The Sticker Shop", slug: "thestickershop", access: "free", diff: "easy" },
+          { name: "DLL Hijacking", slug: "dllhijacking", access: "free", diff: "medium" },
+          { name: "Smol", slug: "smol", access: "free", diff: "medium" },
+          { name: "Robots", slug: "robots", access: "free", diff: "medium" },
+          { name: "OAuth Vulnerabilities", slug: "oauthvulnerabilities", access: "premium", diff: "medium" },
+          { name: "JWT Security", slug: "jwtsecurity", access: "premium", diff: "medium" },
+        ]
+      },
+      {
+        id: "crypto",
+        icon: "🔐",
+        title: "CRYPTOGRAPHY & HASHING",
+        desc: "Encryption, decryption, hash cracking — the science of secrets",
+        color: "#aa55ff",
+        rooms: [
+          { name: "Introduction to Cryptography", slug: "cryptographyintro", access: "free", diff: "easy" },
+          { name: "Cryptography Basics", slug: "cryptographybasics", access: "free", diff: "easy" },
+          { name: "Cryptography for Dummies", slug: "cryptographyfordummies", access: "free", diff: "easy" },
+          { name: "Encryption - Crypto 101", slug: "encryptioncrypto101", access: "free", diff: "easy" },
+          { name: "Hashing - Crypto 101", slug: "hashingcrypto101", access: "free", diff: "easy" },
+          { name: "Introduction to CryptOps", slug: "introductiontocryptops", access: "free", diff: "easy" },
+          { name: "Breaking RSA", slug: "breakrsa", access: "free", diff: "medium" },
+          { name: "Breaking Crypto the Simple Way", slug: "breakingcryptothesimpleway", access: "free", diff: "medium" },
+          { name: "Crypto Failures", slug: "cryptofailures", access: "free", diff: "medium" },
+          { name: "Crack the Hash", slug: "crackthehash", access: "free", diff: "easy" },
+          { name: "Crack The Hash Level 2", slug: "crackthehashlevel2", access: "free", diff: "medium" },
+          { name: "Agent Sudo", slug: "agentsudoctf", access: "free", diff: "easy" },
+          { name: "Brute It", slug: "bruteit", access: "free", diff: "easy" },
+          { name: "Password Attacks", slug: "passwordattacks", access: "premium", diff: "medium" },
+          { name: "c4ptur3-th3-fl4g", slug: "c4ptur3th3fl4g", access: "free", diff: "easy" },
+          { name: "CyberChef: The Basics", slug: "cyberchefbasics", access: "free", diff: "easy" },
+          { name: "Public Key Cryptography Basics", slug: "publickeycrypto", access: "premium", diff: "medium" },
+        ]
+      },
+      {
+        id: "osint",
+        icon: "🕵️",
+        title: "OSINT & RECONNAISSANCE",
+        desc: "Open-source intelligence — be a digital detective",
+        color: "#00d4ff",
+        rooms: [
+          { name: "Google Dorking", slug: "googledorking", access: "free", diff: "easy" },
+          { name: "Probe", slug: "probe", access: "premium", diff: "easy" },
+          { name: "Passive Reconnaissance", slug: "passiverecon", access: "free", diff: "easy" },
+          { name: "OhSINT", slug: "ohsint", access: "free", diff: "easy" },
+          { name: "Advent of Cyber 3 (2021)", slug: "adventofcyber3", access: "free", diff: "easy" },
+          { name: "Geolocating Images", slug: "geolocatingimages", access: "free", diff: "easy" },
+          { name: "Advent of Cyber 2 [2020]", slug: "adventofcyber2", access: "free", diff: "easy" },
+          { name: "Content Discovery", slug: "contentdiscovery", access: "premium", diff: "easy" },
+          { name: "Sakura Room", slug: "sakura", access: "free", diff: "easy" },
+          { name: "Grep", slug: "greprtp", access: "premium", diff: "easy" },
+          { name: "KaffeeSec - SoMeSINT", slug: "somesint", access: "free", diff: "medium" },
+          { name: "Subdomain Enumeration", slug: "subdomainenumeration", access: "premium", diff: "easy" },
+          { name: "Searchlight - IMINT", slug: "searchlightosint", access: "free", diff: "easy" },
+          { name: "Cyber Kill Chain", slug: "cyberkillchainzmt", access: "free", diff: "easy" },
+          { name: "Friday Overtime", slug: "fridayovertime", access: "free", diff: "medium" },
+          { name: "TryPwnMe Two", slug: "trypwnmetwo", access: "free", diff: "hard" },
+          { name: "Shodan.io", slug: "shodan", access: "free", diff: "easy" },
+          { name: "Red Team Recon", slug: "redteamrecon", access: "free", diff: "easy" },
+          { name: "Active Reconnaissance", slug: "activerecon", access: "free", diff: "easy" },
+          { name: "AttackerKB", slug: "attackerkb", access: "free", diff: "easy" },
+          { name: "Search Skills", slug: "searchskills", access: "free", diff: "easy" },
+          { name: "Threat Intel & Containment", slug: "intelcreationandcontainment", access: "free", diff: "easy" },
+          { name: "MITRE", slug: "mitre", access: "free", diff: "easy" },
+          { name: "OpenCTI", slug: "opencti", access: "free", diff: "easy" },
+          { name: "MISP", slug: "misp", access: "free", diff: "easy" },
+          { name: "Diamond Model", slug: "diamondmodelrmuwwg42", access: "free", diff: "easy" },
+          { name: "Pyramid of Pain", slug: "pyramidofpainax", access: "free", diff: "easy" },
+          { name: "Threat Intelligence for SOC", slug: "threatintelligenceforsoc", access: "free", diff: "easy" },
+          { name: "Snapped Phish-ing Line", slug: "snappedphishingline", access: "free", diff: "easy" },
+          { name: "Phishing Emails 1", slug: "phishingemails1tryoe", access: "free", diff: "easy" },
+          { name: "Phishing Emails 2", slug: "phishingemails2rytmuv", access: "free", diff: "easy" },
+          { name: "Threat Hunting: Introduction", slug: "introductiontothreathunting", access: "free", diff: "easy" },
+          { name: "Hunt Me I: Payment Collectors", slug: "paymentcollectors", access: "free", diff: "medium" },
+          { name: "Hunt Me II: Typo Squatters", slug: "typosquatters", access: "free", diff: "medium" },
+          { name: "Intro to Threat Emulation", slug: "threatemulationintro", access: "free", diff: "easy" },
+          { name: "Red Team Threat Intel", slug: "redteamthreatintel", access: "free", diff: "easy" },
+          { name: "Volt Typhoon", slug: "volttyphoon", access: "free", diff: "medium" },
+          { name: "APT28 Inception Theory", slug: "apt28inceptiontheory", access: "free", diff: "medium" },
+          { name: "Conti (Ransomware)", slug: "contiransomwarehgh", access: "free", diff: "easy" },
+          { name: "Solar (Log4j Analysis)", slug: "solar", access: "free", diff: "easy" },
+          { name: "Unified Kill Chain", slug: "unifiedkillchain", access: "free", diff: "easy" },
+          { name: "Red Team OPSEC", slug: "opsec", access: "free", diff: "medium" },
+          { name: "Tor", slug: "torforbeginners", access: "free", diff: "easy" },
+        ]
+      },
+      {
+        id: "networking",
+        icon: "📡",
+        title: "NETWORKING & PROTOCOLS",
+        desc: "TCP/IP, DNS, HTTP, Wireshark — master network fundamentals",
+        color: "#0088ff",
+        rooms: [
+          { name: "Introductory Networking", slug: "introtonetworking", access: "free", diff: "easy" },
+          { name: "What is Networking?", slug: "whatisnetworking", access: "free", diff: "info" },
+          { name: "Networking Concepts", slug: "networkingconcepts", access: "free", diff: "easy" },
+          { name: "Intro to LAN", slug: "introtolan", access: "premium", diff: "easy" },
+          { name: "HTTP in Detail", slug: "httpindetail", access: "free", diff: "easy" },
+          { name: "DNS in Detail", slug: "dnsindetail", access: "free", diff: "easy" },
+          { name: "Nmap", slug: "furthernmap", access: "free", diff: "easy" },
+          { name: "Nmap Live Host Discovery", slug: "nmap01", access: "free", diff: "easy" },
+          { name: "Nmap Basic Port Scans", slug: "nmap02", access: "free", diff: "easy" },
+          { name: "Nmap Advanced Port Scans", slug: "nmap03", access: "free", diff: "easy" },
+          { name: "Nmap Post Port Scans", slug: "nmap04", access: "free", diff: "easy" },
+          { name: "TShark", slug: "tshark", access: "free", diff: "easy" },
+          { name: "TShark: The Basics", slug: "tsharkthebasics", access: "free", diff: "easy" },
+          { name: "Wireshark: The Basics", slug: "wiresharkthebasics", access: "free", diff: "easy" },
+          { name: "Wireshark: Packet Operations", slug: "wiresharkpacketoperations", access: "free", diff: "easy" },
+          { name: "Wireshark: Traffic Analysis", slug: "wiresharktrafficanalysis", access: "free", diff: "medium" },
+          { name: "DNS Manipulation", slug: "dnsmanipulation", access: "free", diff: "medium" },
+          { name: "Dumping Router Firmware", slug: "rfirmware", access: "free", diff: "medium" },
+          { name: "Network Services", slug: "networkservices", access: "free", diff: "easy" },
+          { name: "Network Services 2", slug: "networkservices2", access: "free", diff: "easy" },
+          { name: "Network Security", slug: "intronetworksecurity", access: "free", diff: "easy" },
+          { name: "Network Device Hardening", slug: "networkdevicehardening", access: "premium", diff: "medium" },
+        ]
+      },
+      {
+        id: "tooling",
+        icon: "🛠️",
+        title: "TOOLING & FRAMEWORKS",
+        desc: "Metasploit, Hydra, Nessus, ffuf — the complete hacker toolkit",
+        color: "#ff8800",
+        rooms: [
+          { name: "Metasploit: Introduction", slug: "metasploitintro", access: "free", diff: "easy" },
+          { name: "Metasploit: Exploitation", slug: "metasploitexploitation", access: "free", diff: "easy" },
+          { name: "Metasploit: Meterpreter", slug: "meterpreter", access: "free", diff: "easy" },
+          { name: "Hydra", slug: "hydra", access: "free", diff: "easy" },
+          { name: "tmux", slug: "rptmux", access: "free", diff: "easy" },
+          { name: "REmux The Tmux", slug: "tmuxremux", access: "free", diff: "easy" },
+          { name: "Toolbox: Vim", slug: "toolboxvim", access: "free", diff: "easy" },
+          { name: "Nessus", slug: "rpnessusredux", access: "free", diff: "easy" },
+          { name: "OpenVAS", slug: "openvas", access: "free", diff: "easy" },
+          { name: "RustScan", slug: "rustscan", access: "free", diff: "easy" },
+          { name: "ffuf", slug: "ffuf", access: "free", diff: "easy" },
+          { name: "Snyk Open Source", slug: "snykopensource", access: "free", diff: "easy" },
+          { name: "Snyk Code", slug: "snykcode", access: "free", diff: "easy" },
+          { name: "Phishing: HiddenEye", slug: "phishinghiddeneye", access: "free", diff: "easy" },
+          { name: "Intro to Pwntools", slug: "introtopwntools", access: "free", diff: "medium" },
+          { name: "Splunk: Basics", slug: "splunk101", access: "free", diff: "easy" },
+          { name: "Splunk: Exploring SPL", slug: "splunkexploringspl", access: "free", diff: "easy" },
+          { name: "Yara", slug: "yara", access: "free", diff: "easy" },
+          { name: "NetworkMiner", slug: "networkminer", access: "free", diff: "easy" },
+          { name: "Snort", slug: "snort", access: "free", diff: "easy" },
+          { name: "Zeek", slug: "zeekbro", access: "free", diff: "medium" },
+          { name: "Sigma", slug: "sigma", access: "free", diff: "medium" },
+          { name: "Custom Tooling Using Python", slug: "customtoolingpython", access: "free", diff: "medium" },
+          { name: "Intro to IaC", slug: "introtoiac", access: "free", diff: "easy" },
+        ]
+      },
+      {
+        id: "stego",
+        icon: "🎭",
+        title: "STEGANOGRAPHY",
+        desc: "Find hidden data in images, audio and files",
+        color: "#aa55ff",
+        rooms: [
+          { name: "Cicada-3301 Vol:1", slug: "cicada3301vol1", access: "free", diff: "hard" },
+          { name: "Madness", slug: "madness", access: "free", diff: "easy" },
+          { name: "Psycho Break", slug: "psychobreak", access: "free", diff: "medium" },
+          { name: "Unstable Twin", slug: "unstabletwin", access: "free", diff: "medium" },
+          { name: "Agent Sudo", slug: "agentsudoctf", access: "free", diff: "easy" },
+          { name: "Confidential", slug: "confidential", access: "free", diff: "easy" },
+        ]
+      },
+      {
+        id: "dfir",
+        icon: "🔬",
+        title: "DIGITAL FORENSICS & DFIR",
+        desc: "Collect evidence, investigate breaches, respond to incidents",
+        color: "#00d4ff",
+        rooms: [
+          { name: "DFIR: An Introduction", slug: "introductoryroomdfirmodule", access: "free", diff: "easy" },
+          { name: "Introduction to Digital Forensics", slug: "introdigitalforensics", access: "free", diff: "easy" },
+          { name: "Forensics", slug: "forensics", access: "free", diff: "hard" },
+          { name: "Memory Forensics", slug: "memoryforensics", access: "free", diff: "easy" },
+          { name: "Memory Analysis Introduction", slug: "memoryanalysisintroduction", access: "free", diff: "easy" },
+          { name: "Disk Analysis & Autopsy", slug: "autopsy2ze0", access: "free", diff: "easy" },
+          { name: "Digital Forensics Case B4DM755", slug: "caseb4dm755", access: "free", diff: "medium" },
+          { name: "Windows Forensics 1", slug: "windowsforensics1", access: "free", diff: "easy" },
+          { name: "Windows Forensics 2", slug: "windowsforensics2", access: "free", diff: "easy" },
+          { name: "Windows Applications Forensics", slug: "windowsapplications", access: "free", diff: "easy" },
+          { name: "Linux Forensics", slug: "linuxforensics", access: "free", diff: "easy" },
+          { name: "Linux Server Forensics", slug: "linuxserverforensics", access: "free", diff: "medium" },
+          { name: "Forensic Imaging", slug: "forensicimaging", access: "free", diff: "easy" },
+          { name: "Intro to Cold System Forensics", slug: "introtocoldsystemforensics", access: "free", diff: "easy" },
+          { name: "Redline", slug: "btredlinejoxr3d", access: "free", diff: "easy" },
+          { name: "KAPE", slug: "kape", access: "free", diff: "easy" },
+          { name: "Carnage", slug: "c2carnage", access: "free", diff: "easy" },
+          { name: "Servidae: Log Analysis in ELK", slug: "servidae", access: "free", diff: "medium" },
+          { name: "IR Playbooks", slug: "irplaybooks", access: "free", diff: "easy" },
+          { name: "IR Philosophy and Ethics", slug: "irphilosophyethics", access: "free", diff: "easy" },
+          { name: "Identification & Scoping", slug: "identificationandscoping", access: "free", diff: "easy" },
+          { name: "Legal Considerations in DFIR", slug: "dfirprocesslegalconsiderations", access: "free", diff: "easy" },
+          { name: "Dunkle Materie", slug: "dunklematerieptxc9", access: "free", diff: "medium" },
+          { name: "Unattended", slug: "unattended", access: "free", diff: "medium" },
+          { name: "Intro to Endpoint Security", slug: "introtoendpointsecurity", access: "free", diff: "easy" },
+          { name: "IR Timeline Analysis", slug: "dfirtimelineanalysis", access: "free", diff: "medium" },
+          { name: "macOS Forensics: The Basics", slug: "macosforensicsbasics", access: "free", diff: "easy" },
+          { name: "macOS Forensics: Artefacts", slug: "macosforensicsartefacts", access: "free", diff: "medium" },
+          { name: "FAT32 Analysis", slug: "fat32analysis", access: "free", diff: "medium" },
+          { name: "MBR and GPT Analysis", slug: "mbrandgptanalysis", access: "free", diff: "medium" },
+          { name: "Mobile Acquisition", slug: "mobileacquisition", access: "free", diff: "easy" },
+          { name: "Compromised Windows Analysis", slug: "compromisedwindowsanalysis", access: "free", diff: "medium" },
+          { name: "Incident Response Process", slug: "incidentresponseprocess", access: "free", diff: "easy" },
+          { name: "Supply Chain Attack: Lottie", slug: "supplychainattacks", access: "free", diff: "medium" },
+          { name: "Introduction To Honeypots", slug: "introductiontohoneypots", access: "free", diff: "easy" },
+          { name: "SOC L1 Alert Triage", slug: "socl1alerttriage", access: "free", diff: "easy" },
+          { name: "SOC L1 Alert Reporting", slug: "socl1alertreporting", access: "free", diff: "easy" },
+          { name: "MS Sentinel: Just Looking", slug: "justlooking", access: "free", diff: "medium" },
+          { name: "Unified Kill Chain", slug: "unifiedkillchain", access: "free", diff: "easy" },
+          { name: "Cyber Kill Chain", slug: "cyberkillchainzmt", access: "free", diff: "easy" },
+          { name: "Post-Exploitation Basics", slug: "postexploit", access: "premium", diff: "easy" },
+        ]
+      },
+      {
+        id: "pcap",
+        icon: "📡",
+        title: "PCAP & TRAFFIC ANALYSIS",
+        desc: "Read network captures and detect C2 traffic",
+        color: "#00ff88",
+        rooms: [
+          { name: "Traffic Analysis Essentials", slug: "trafficanalysisessentials", access: "free", diff: "easy" },
+          { name: "Wireshark: The Basics", slug: "wiresharkthebasics", access: "free", diff: "easy" },
+          { name: "Wireshark: Packet Operations", slug: "wiresharkpacketoperations", access: "free", diff: "easy" },
+          { name: "Wireshark: Traffic Analysis", slug: "wiresharktrafficanalysis", access: "free", diff: "medium" },
+          { name: "h4cked", slug: "h4cked", access: "free", diff: "easy" },
+          { name: "Carnage", slug: "c2carnage", access: "free", diff: "easy" },
+          { name: "CCT2019", slug: "cct2019", access: "free", diff: "hard" },
+          { name: "Overpass 2 - Hacked", slug: "overpass2hacked", access: "free", diff: "easy" },
+          { name: "NetworkMiner", slug: "networkminer", access: "free", diff: "easy" },
+          { name: "TShark: The Basics", slug: "tsharkthebasics", access: "free", diff: "easy" },
+          { name: "TShark: CLI Wireshark Features", slug: "tsharkcliwiresharkfeatures", access: "free", diff: "medium" },
+        ]
+      },
+      {
+        id: "malware",
+        icon: "🦠",
+        title: "MALWARE ANALYSIS",
+        desc: "Reverse, analyze and detect malware",
+        color: "#ff3355",
+        rooms: [
+          { name: "Intro to Detection Engineering", slug: "introtodetectionengineering", access: "free", diff: "easy" },
+          { name: "History of Malware", slug: "historyofmalware", access: "free", diff: "info" },
+          { name: "MAL: Malware Introductory", slug: "malmalintroductory", access: "free", diff: "easy" },
+          { name: "Basic Malware RE", slug: "basicmalwarere", access: "free", diff: "easy" },
+          { name: "MAL: Researching", slug: "malresearching", access: "free", diff: "easy" },
+          { name: "Mobile Malware Analysis", slug: "mma", access: "free", diff: "medium" },
+          { name: "Android Malware Analysis", slug: "androidmalwareanalysis", access: "free", diff: "medium" },
+          { name: "APT28 Inception Theory", slug: "apt28inceptiontheory", access: "free", diff: "medium" },
+          { name: "Carnage", slug: "c2carnage", access: "free", diff: "easy" },
+          { name: "Dunkle Materie", slug: "dunklematerieptxc9", access: "free", diff: "medium" },
+          { name: "Conti (Ransomware)", slug: "contiransomwarehgh", access: "free", diff: "easy" },
+          { name: "REvil Corp", slug: "revilcorp", access: "free", diff: "medium" },
+          { name: "Solar (Log4j Analysis)", slug: "solar", access: "free", diff: "easy" },
+          { name: "Hacking Hadoop", slug: "hackinghadoop", access: "free", diff: "medium" },
+          { name: "Outlook NTLM Leak", slug: "outlookntlmleak", access: "free", diff: "medium" },
+          { name: "ret2libc", slug: "ret2libc", access: "free", diff: "hard" },
+          { name: "AttackerKB", slug: "attackerkb", access: "free", diff: "easy" },
+          { name: "XDR: Introduction", slug: "xdrintroduction", access: "free", diff: "easy" },
+          { name: "Linux Function Hooking", slug: "linuxfunctionhooking", access: "free", diff: "medium" },
+          { name: "Conti Ransomware", slug: "contiransomwarehgh", access: "free", diff: "easy" },
+          { name: "MAL: Strings", slug: "malstrings", access: "premium", diff: "medium" },
+          { name: "Sandbox Evasion", slug: "sandboxevasion", access: "premium", diff: "hard" },
+          { name: "MAL: Malware Introductory", slug: "malmalintroductory", access: "free", diff: "easy" },
+          { name: "MAL: Researching", slug: "malresearching", access: "free", diff: "easy" },
+        ]
+      },
+      {
+        id: "privesc",
+        icon: "🔓",
+        title: "PRIVILEGE ESCALATION",
+        desc: "From low-privilege user to root/SYSTEM",
+        color: "#ffdd00",
+        rooms: [
+          { name: "Linux Privilege Escalation", slug: "linprivesc", access: "free", diff: "medium" },
+          { name: "Linux PrivEsc", slug: "linuxprivesc", access: "free", diff: "easy" },
+          { name: "Linux PrivEsc Arena", slug: "linuxprivescarena", access: "free", diff: "medium" },
+          { name: "Windows PrivEsc", slug: "windows10privesc", access: "free", diff: "medium" },
+          { name: "Windows PrivEsc Arena", slug: "windowsprivescarena", access: "free", diff: "medium" },
+          { name: "Linux Agency", slug: "linuxagency", access: "free", diff: "medium" },
+          { name: "Sudo Security Bypass", slug: "sudovulnsbypass", access: "free", diff: "easy" },
+          { name: "Sudo Buffer Overflow", slug: "sudovulnsbof", access: "free", diff: "medium" },
+          { name: "Baron Samedit (CVE-2021-3156)", slug: "sudovulnssamedit", access: "free", diff: "easy" },
+          { name: "Polkit: CVE-2021-3560", slug: "polkit", access: "free", diff: "easy" },
+          { name: "Blaster", slug: "blaster", access: "free", diff: "easy" },
+          { name: "Ignite", slug: "ignite", access: "free", diff: "easy" },
+          { name: "Kenobi", slug: "kenobi", access: "free", diff: "easy" },
+          { name: "Pickle Rick", slug: "picklerick", access: "free", diff: "easy" },
+          { name: "Post-Exploitation Basics", slug: "postexploit", access: "premium", diff: "easy" },
+          { name: "Hacking with PowerShell", slug: "powershell", access: "free", diff: "medium" },
+          { name: "Credentials Harvesting", slug: "credharvesting", access: "free", diff: "medium" },
+          { name: "The Great Escape (Docker)", slug: "thegreatescape", access: "free", diff: "medium" },
+          { name: "Cluster Hardening", slug: "clusterhardening", access: "free", diff: "medium" },
+          { name: "Sweettooth Inc. (Docker)", slug: "sweettoothinc", access: "free", diff: "medium" },
+        ]
+      },
+      {
+        id: "bof",
+        icon: "💣",
+        title: "BUFFER OVERFLOW & BINARY EXPLOITATION",
+        desc: "Smash the stack and take control of execution",
+        color: "#ff3355",
+        rooms: [
+          { name: "Buffer Overflow Prep", slug: "bufferoverflowprep", access: "free", diff: "easy" },
+          { name: "Brainstorm", slug: "brainstorm", access: "free", diff: "easy" },
+          { name: "Gatekeeper", slug: "gatekeeper", access: "free", diff: "medium" },
+          { name: "Chronicle", slug: "chronicle", access: "free", diff: "medium" },
+          { name: "Intro to Pwntools", slug: "introtopwntools", access: "free", diff: "medium" },
+          { name: "Brainpan 1", slug: "brainpan", access: "free", diff: "hard" },
+          { name: "ret2libc", slug: "ret2libc", access: "free", diff: "hard" },
+          { name: "Sudo Buffer Overflow", slug: "sudovulnsbof", access: "free", diff: "medium" },
+          { name: "Buffer Overflows in Practice", slug: "bufferoverflowprep", access: "free", diff: "easy" },
+          { name: "Overpass 2 - Hacked", slug: "overpass2hacked", access: "free", diff: "easy" },
+          { name: "Linux Function Hooking", slug: "linuxfunctionhooking", access: "free", diff: "medium" },
+        ]
+      },
+      {
+        id: "re",
+        icon: "⚙️",
+        title: "REVERSE ENGINEERING",
+        desc: "Disassemble binaries, understand obfuscation, crack executables",
+        color: "#aa55ff",
+        rooms: [
+          { name: "Windows x64 Assembly", slug: "win64assembly", access: "free", diff: "medium" },
+          { name: "Reversing ELF", slug: "reverselfiles", access: "free", diff: "easy" },
+          { name: "JVM Reverse Engineering", slug: "jvmreverseengineering", access: "free", diff: "medium" },
+          { name: "Aster", slug: "aster", access: "free", diff: "medium" },
+          { name: "Classic Passwd", slug: "classicpasswd", access: "free", diff: "easy" },
+          { name: "REloaded", slug: "reloaded", access: "free", diff: "medium" },
+          { name: "Binary Heaven", slug: "binaryheaven", access: "free", diff: "medium" },
+          { name: "Windows Reversing Intro", slug: "windowsreversingintro", access: "free", diff: "easy" },
+          { name: "x86 Architecture Overview", slug: "x8664arch", access: "free", diff: "easy" },
+          { name: "Peak Hill", slug: "peakhill", access: "free", diff: "medium" },
+          { name: "JVM Reverse Engineering", slug: "jvmreverseengineering", access: "free", diff: "medium" },
+          { name: "Basic Malware RE", slug: "basicmalwarere", access: "free", diff: "easy" },
+          { name: "Sandbox Evasion", slug: "sandboxevasion", access: "premium", diff: "hard" },
+          { name: "MAL: Strings", slug: "malstrings", access: "premium", diff: "medium" },
+        ]
+      },
+      {
+        id: "ad",
+        icon: "🏰",
+        title: "ACTIVE DIRECTORY",
+        desc: "Attack and defend enterprise Windows environments",
+        color: "#0088ff",
+        rooms: [
+          { name: "Active Directory Basics", slug: "winadbasics", access: "free", diff: "easy" },
+          { name: "Breaching Active Directory", slug: "breachingad", access: "free", diff: "medium" },
+          { name: "Enumerating Active Directory", slug: "adenumeration", access: "free", diff: "medium" },
+          { name: "AD: Basic Enumeration", slug: "adbasicenumeration", access: "free", diff: "medium" },
+          { name: "Attacktive Directory", slug: "attacktivedirectory", access: "free", diff: "easy" },
+          { name: "Lateral Movement and Pivoting", slug: "lateralmovementandpivoting", access: "free", diff: "medium" },
+          { name: "Exploiting Active Directory", slug: "exploitingad", access: "free", diff: "medium" },
+          { name: "Persisting Active Directory", slug: "persistingad", access: "free", diff: "medium" },
+          { name: "Credentials Harvesting", slug: "credharvesting", access: "free", diff: "medium" },
+          { name: "AD Certificate Templates", slug: "adcertificatetemplates", access: "free", diff: "medium" },
+          { name: "Post-Exploitation Basics", slug: "postexploit", access: "premium", diff: "easy" },
+          { name: "Enterprise", slug: "enterprise", access: "free", diff: "hard" },
+          { name: "RazorBlack", slug: "raz0rblack", access: "free", diff: "medium" },
+          { name: "VulnNet: Active", slug: "vulnnetactive", access: "free", diff: "medium" },
+          { name: "VulnNet: Roasted", slug: "vulnnetroasted", access: "free", diff: "easy" },
+          { name: "Hacking Hadoop", slug: "hackinghadoop", access: "free", diff: "medium" },
+          { name: "Holo (Enterprise Network)", slug: "hololive", access: "premium", diff: "hard" },
+          { name: "Corp", slug: "corp", access: "premium", diff: "medium" },
+          { name: "AD Certificate Templates", slug: "adcertificatetemplates", access: "free", diff: "medium" },
+        ]
+      },
+      {
+        id: "insane_ctf",
+        icon: "💀",
+        title: "INSANE CHALLENGES",
+        desc: "Expert-only rooms — maximum difficulty, real-world complexity",
+        color: "#aa55ff",
+        rooms: [
+          { name: "Osiris", slug: "osiris", access: "premium", diff: "insane" },
+          { name: "Theseus", slug: "theseus", access: "premium", diff: "insane" },
+          { name: "CCT2019", slug: "cct2019", access: "free", diff: "insane" },
+          { name: "Crocc Crew", slug: "croccrew", access: "premium", diff: "insane" },
+          { name: "Frosteau Busy with Vim", slug: "frostbyfrosteau", access: "free", diff: "insane" },
+          { name: "You're in a cave", slug: "youreInacave", access: "free", diff: "insane" },
+          { name: "Scheme Catcher", slug: "schemecatcher", access: "premium", diff: "insane" },
+          { name: "Snowy ARMageddon", slug: "snowyarmageddon", access: "free", diff: "insane" },
+        ]
+      },
+      {
+        id: "cloud",
+        icon: "☁️",
+        title: "CLOUD & CONTAINER SECURITY",
+        desc: "AWS, Kubernetes, Docker — new attack surfaces",
+        color: "#00d4ff",
+        rooms: [
+          { name: "AWS S3 Basics", slug: "awss3service", access: "free", diff: "easy" },
+          { name: "K8s Runtime Security", slug: "k8sruntimesecurity", access: "free", diff: "medium" },
+          { name: "K8s Best Security Practices", slug: "k8sbestsecuritypractices", access: "free", diff: "medium" },
+          { name: "Cluster Hardening", slug: "clusterhardening", access: "free", diff: "medium" },
+          { name: "Intro to Docker", slug: "introtodockerk8pdqk", access: "free", diff: "easy" },
+          { name: "Intro to IaC", slug: "introtoiac", access: "free", diff: "easy" },
+          { name: "Sweettooth Inc.", slug: "sweettoothinc", access: "free", diff: "medium" },
+          { name: "The Great Escape", slug: "thegreatescape", access: "free", diff: "medium" },
+          { name: "Volt Typhoon", slug: "volttyphoon", access: "free", diff: "medium" },
+          { name: "TryHack3M: Sch3Ma D3Mon", slug: "sch3mad3mon", access: "free", diff: "medium" },
+          { name: "AWS S3 Security", slug: "awss3service", access: "free", diff: "easy" },
+          { name: "K8s Runtime Security", slug: "k8sruntimesecurity", access: "free", diff: "medium" },
+          { name: "K8s Best Security Practices", slug: "k8sbestsecuritypractices", access: "free", diff: "medium" },
+          { name: "Volt Typhoon", slug: "volttyphoon", access: "free", diff: "medium" },
+          { name: "TryHack3M: Sch3Ma D3Mon", slug: "sch3mad3mon", access: "free", diff: "medium" },
+        ]
+      },
+      {
+        id: "scripting",
+        icon: "📝",
+        title: "SCRIPTING & PROGRAMMING",
+        desc: "Python, Bash, Rust — automate and hack",
+        color: "#00ff88",
+        rooms: [
+          { name: "Python Basics", slug: "pythonbasics", access: "free", diff: "easy" },
+          { name: "Python Playground", slug: "pythonplayground", access: "free", diff: "easy" },
+          { name: "Intro PoC Scripting", slug: "intropocscripting", access: "free", diff: "medium" },
+          { name: "JavaScript Basics", slug: "javascriptbasics", access: "free", diff: "easy" },
+          { name: "Bash Scripting", slug: "bashscripting", access: "free", diff: "easy" },
+          { name: "Learn Rust", slug: "rust", access: "free", diff: "easy" },
+          { name: "Regular Expressions", slug: "catregex", access: "free", diff: "easy" },
+          { name: "Jupyter 101", slug: "jupyter101", access: "free", diff: "easy" },
+          { name: "Custom Tooling Using Python", slug: "customtoolingpython", access: "free", diff: "medium" },
+          { name: "Introduction to Flask", slug: "flask", access: "free", diff: "easy" },
+          { name: "Introduction to Django", slug: "django", access: "free", diff: "easy" },
+          { name: "Python for Pentesters", slug: "pythonforcybersecurity", access: "premium", diff: "easy" },
+          { name: "Hashing - Crypto 101", slug: "hashingcrypto101", access: "free", diff: "easy" },
+          { name: "Peak Hill", slug: "peakhill", access: "free", diff: "medium" },
+          { name: "Hacking with PowerShell", slug: "powershell", access: "free", diff: "medium" },
+          { name: "Python for Pentesters", slug: "pythonforcybersecurity", access: "premium", diff: "easy" },
+        ]
+      },
+      {
+        id: "wifi",
+        icon: "📶",
+        title: "WI-FI & HARDWARE HACKING",
+        desc: "Crack WPA2, wireless recon, hardware exploration",
+        color: "#ff8800",
+        rooms: [
+          { name: "Wifi Hacking 101", slug: "wifihacking101", access: "free", diff: "easy" },
+          { name: "Printer Hacking 101", slug: "printerhacking101", access: "free", diff: "medium" },
+          { name: "Dumping Router Firmware", slug: "rfirmware", access: "free", diff: "medium" },
+          { name: "Intro to IoT Pentesting", slug: "iotintro", access: "free", diff: "easy" },
+          { name: "Bugged (IoT CTF)", slug: "bugged", access: "free", diff: "easy" },
+          { name: "Tor", slug: "torforbeginners", access: "free", diff: "easy" },
+          { name: "Exploiting IoT Comms with MQTT", slug: "iotintro", access: "free", diff: "easy" },
+          { name: "Hacking Hadoop", slug: "hackinghadoop", access: "free", diff: "medium" },
+          { name: "Linux System Hardening", slug: "linuxsystemhardening", access: "premium", diff: "medium" },
+        ]
+      },
+      {
+        id: "mobile",
+        icon: "📱",
+        title: "ANDROID & MOBILE SECURITY",
+        desc: "APK analysis, Android reverse engineering, mobile malware",
+        color: "#00d4ff",
+        rooms: [
+          { name: "Android Hacking 101", slug: "androidhacking101", access: "free", diff: "easy" },
+          { name: "Mobile Malware Analysis", slug: "mma", access: "free", diff: "medium" },
+          { name: "Android Malware Analysis", slug: "androidmalwareanalysis", access: "free", diff: "medium" },
+          { name: "Mobile Acquisition", slug: "mobileacquisition", access: "free", diff: "easy" },
+          { name: "Bugged", slug: "bugged", access: "free", diff: "easy" },
+          { name: "macOS Forensics: The Basics", slug: "macosforensicsbasics", access: "free", diff: "easy" },
+          { name: "macOS Forensics: Artefacts", slug: "macosforensicsartefacts", access: "free", diff: "medium" },
+          { name: "Mobile Acquisition", slug: "mobileacquisition", access: "free", diff: "easy" },
+        ]
+      },
+      {
+        id: "iot",
+        icon: "🏭",
+        title: "IoT & ICS / SCADA",
+        desc: "Attack industrial control systems and embedded devices",
+        color: "#ff3355",
+        rooms: [
+          { name: "Intro to IoT Pentesting", slug: "iotintro", access: "free", diff: "easy" },
+          { name: "Attacking ICS Plant #1", slug: "attackingics1", access: "free", diff: "medium" },
+          { name: "Attacking ICS Plant #2", slug: "attackingics2", access: "free", diff: "hard" },
+          { name: "Printer Hacking 101", slug: "printerhacking101", access: "free", diff: "medium" },
+          { name: "Dumping Router Firmware", slug: "rfirmware", access: "free", diff: "medium" },
+          { name: "Volt Typhoon", slug: "volttyphoon", access: "free", diff: "medium" },
+          { name: "Hacking Hadoop", slug: "hackinghadoop", access: "free", diff: "medium" },
+          { name: "Network Device Hardening", slug: "networkdevicehardening", access: "premium", diff: "medium" },
+        ]
+      },
+      {
+        id: "redteam",
+        icon: "🔴",
+        title: "RED TEAM OPERATIONS",
+        desc: "Full red team methodology — OPSEC to C2 frameworks",
+        color: "#ff3355",
+        rooms: [
+          { name: "Red Team Fundamentals", slug: "redteamfundamentals", access: "free", diff: "easy" },
+          { name: "Red Team Engagements", slug: "redteamengagements", access: "free", diff: "easy" },
+          { name: "Red Team Recon", slug: "redteamrecon", access: "free", diff: "easy" },
+          { name: "Red Team OPSEC", slug: "opsec", access: "free", diff: "medium" },
+          { name: "Red Team Threat Intel", slug: "redteamthreatintel", access: "free", diff: "easy" },
+          { name: "Weaponization", slug: "weaponization", access: "free", diff: "easy" },
+          { name: "Phishing", slug: "phishingyl", access: "free", diff: "easy" },
+          { name: "Phishing Emails 1", slug: "phishingemails1tryoe", access: "free", diff: "easy" },
+          { name: "Phishing Emails 2", slug: "phishingemails2rytmuv", access: "free", diff: "easy" },
+          { name: "Lateral Movement and Pivoting", slug: "lateralmovementandpivoting", access: "free", diff: "medium" },
+          { name: "Wreath (Pivoting Network Lab)", slug: "wreath", access: "free", diff: "medium" },
+          { name: "Snapped Phish-ing Line", slug: "snappedphishingline", access: "free", diff: "easy" },
+          { name: "Firewalls", slug: "redteamfirewalls", access: "free", diff: "medium" },
+          { name: "Tor", slug: "torforbeginners", access: "free", diff: "easy" },
+          { name: "Volt Typhoon", slug: "volttyphoon", access: "free", diff: "medium" },
+          { name: "Hacking with PowerShell", slug: "powershell", access: "free", diff: "medium" },
+          { name: "AV Evasion: Shellcode", slug: "avevasionshellcode", access: "premium", diff: "hard" },
+          { name: "Runtime Detection Evasion", slug: "runtimedetectionevasion", access: "premium", diff: "hard" },
+          { name: "Sandbox Evasion", slug: "sandboxevasion", access: "premium", diff: "hard" },
+          { name: "Abusing Windows Internals", slug: "abusingwindowsinternals", access: "premium", diff: "hard" },
+        ]
+      },
+      {
+        id: "soc",
+        icon: "🔵",
+        title: "SOC, BLUE TEAM & SIEM",
+        desc: "Detect, respond and defend — the defender's perspective",
+        color: "#0088ff",
+        rooms: [
+          { name: "Security Operations", slug: "securityoperations", access: "free", diff: "easy" },
+          { name: "SOC Fundamentals", slug: "socfundamentals", access: "free", diff: "easy" },
+          { name: "Junior Security Analyst Intro", slug: "jrsecanalystintrouxo", access: "free", diff: "easy" },
+          { name: "Threat Intelligence for SOC", slug: "threatintelligenceforsoc", access: "free", diff: "easy" },
+          { name: "Splunk: Basics", slug: "splunk101", access: "free", diff: "easy" },
+          { name: "Splunk: Exploring SPL", slug: "splunkexploringspl", access: "free", diff: "easy" },
+          { name: "Incident Handling with Splunk", slug: "splunk201", access: "free", diff: "medium" },
+          { name: "Investigating with ELK 101", slug: "investigatingwithelk101", access: "free", diff: "easy" },
+          { name: "ItsyBitsy (ELK CTF)", slug: "itsybitsy", access: "free", diff: "medium" },
+          { name: "Snort", slug: "snort", access: "free", diff: "easy" },
+          { name: "Snort Challenge - The Basics", slug: "snortchallenges1", access: "free", diff: "medium" },
+          { name: "Snort Challenge - Live Attacks", slug: "snortchallenges2", access: "free", diff: "hard" },
+          { name: "Zeek", slug: "zeekbro", access: "free", diff: "medium" },
+          { name: "Sigma", slug: "sigma", access: "free", diff: "medium" },
+          { name: "Yara", slug: "yara", access: "free", diff: "easy" },
+          { name: "MITRE", slug: "mitre", access: "free", diff: "easy" },
+          { name: "OpenCTI", slug: "opencti", access: "free", diff: "easy" },
+          { name: "MISP", slug: "misp", access: "free", diff: "easy" },
+          { name: "Cyber Kill Chain", slug: "cyberkillchainzmt", access: "free", diff: "easy" },
+          { name: "Unified Kill Chain", slug: "unifiedkillchain", access: "free", diff: "easy" },
+          { name: "Diamond Model", slug: "diamondmodelrmuwwg42", access: "free", diff: "easy" },
+          { name: "Threat Hunting: Introduction", slug: "introductiontothreathunting", access: "free", diff: "easy" },
+          { name: "Threat Hunting With YARA", slug: "threathuntingwithyara", access: "free", diff: "medium" },
+          { name: "Hunt Me I: Payment Collectors", slug: "paymentcollectors", access: "free", diff: "medium" },
+          { name: "Hunt Me II: Typo Squatters", slug: "typosquatters", access: "free", diff: "medium" },
+          { name: "Servidae: Log Analysis in ELK", slug: "servidae", access: "free", diff: "medium" },
+          { name: "SOC L1 Alert Triage", slug: "socl1alerttriage", access: "free", diff: "easy" },
+          { name: "SOC L1 Alert Reporting", slug: "socl1alertreporting", access: "free", diff: "easy" },
+          { name: "MS Sentinel: Just Looking", slug: "justlooking", access: "free", diff: "medium" },
+          { name: "XDR: Introduction", slug: "xdrintroduction", access: "free", diff: "easy" },
+          { name: "Cyber Threat Intelligence", slug: "cyberthreatintel", access: "free", diff: "easy" },
+          { name: "Threat Hunting With YARA", slug: "threathuntingwithyara", access: "free", diff: "medium" },
+          { name: "Windows Internals", slug: "windowsinternals", access: "premium", diff: "medium" },
+          { name: "Abusing Windows Internals", slug: "abusingwindowsinternals", access: "premium", diff: "hard" },
+          { name: "Network Device Hardening", slug: "networkdevicehardening", access: "premium", diff: "medium" },
+        ]
+      },
+      {
+        id: "ai",
+        icon: "🤖",
+        title: "AI & ML SECURITY",
+        desc: "Attack and defend AI systems",
+        color: "#aa55ff",
+        rooms: [
+          { name: "Security Principles", slug: "securityprinciples", access: "free", diff: "easy" },
+          { name: "Logless Hunt", slug: "loglesshunt", access: "free", diff: "medium" },
+          { name: "Custom Tooling Using Python", slug: "customtoolingpython", access: "free", diff: "medium" },
+          { name: "Intro PoC Scripting", slug: "intropocscripting", access: "free", diff: "medium" },
+        ]
+      },
+      {
+        id: "cves",
+        icon: "🐛",
+        title: "CVEs & VULNERABILITY RESEARCH",
+        desc: "Real-world CVEs — learn to exploit known vulnerabilities",
+        color: "#ff8800",
+        rooms: [
+          { name: "Blue (EternalBlue MS17-010)", slug: "blue", access: "free", diff: "easy" },
+          { name: "Log4Shell - Solar (CVE-2021-44228)", slug: "solar", access: "free", diff: "easy" },
+          { name: "Baron Samedit (CVE-2021-3156)", slug: "sudovulnssamedit", access: "free", diff: "easy" },
+          { name: "Polkit: CVE-2021-3560", slug: "polkit", access: "free", diff: "easy" },
+          { name: "CVE-2021-41773 / 42013 (Apache)", slug: "cve202141773", access: "free", diff: "easy" },
+          { name: "Wordpress: CVE-2021-29447", slug: "wordpresscve202129447", access: "free", diff: "easy" },
+          { name: "OverlayFS - CVE-2021-3493", slug: "overlayfs", access: "free", diff: "easy" },
+          { name: "Dirty Pipe: CVE-2022-0847", slug: "dirtypipe", access: "free", diff: "easy" },
+          { name: "Sudo Security Bypass (CVE-2019-14287)", slug: "sudovulnsbypass", access: "free", diff: "easy" },
+          { name: "Sudo Buffer Overflow (CVE-2021-3156)", slug: "sudovulnsbof", access: "free", diff: "medium" },
+          { name: "PaperCut: CVE-2023-27350", slug: "papercut", access: "free", diff: "easy" },
+          { name: "Confluence CVE-2023-22515", slug: "confluence202322515", access: "free", diff: "easy" },
+          { name: "GitLab CVE-2023-7028", slug: "gitlabcve20237028", access: "free", diff: "easy" },
+          { name: "CVE-2023-38408 (OpenSSH)", slug: "cve202338408", access: "free", diff: "easy" },
+          { name: "Looney Tunables (CVE-2023-4911)", slug: "looneytunes", access: "free", diff: "easy" },
+          { name: "Moniker Link (CVE-2024-21413)", slug: "monikerlink", access: "free", diff: "easy" },
+          { name: "Cactus", slug: "cactus", access: "free", diff: "easy" },
+          { name: "Conti Ransomware", slug: "contiransomwarehgh", access: "free", diff: "easy" },
+          { name: "Git and Crumpets", slug: "gitandcrumpets", access: "free", diff: "medium" },
+          { name: "Binary Heaven", slug: "binaryheaven", access: "free", diff: "medium" },
+          { name: "Bypass Really Simple Security", slug: "bypassreallysimplesecurity", access: "free", diff: "medium" },
+          { name: "REvil Corp", slug: "revilcorp", access: "free", diff: "medium" },
+          { name: "DLL Hijacking", slug: "dllhijacking", access: "free", diff: "medium" },
+          { name: "Outlook NTLM Leak", slug: "outlookntlmleak", access: "free", diff: "medium" },
+          { name: "Supply Chain Attack: Lottie", slug: "supplychainattacks", access: "free", diff: "medium" },
+          { name: "Hip Flask", slug: "hipflask", access: "free", diff: "medium" },
+          { name: "Zerologon (CVE-2020-1472)", slug: "raz0rblack", access: "free", diff: "medium" },
+          { name: "PaperCut: CVE-2023-27350", slug: "papercut", access: "free", diff: "easy" },
+          { name: "Confluence CVE-2023-22515", slug: "confluence202322515", access: "free", diff: "easy" },
+        ]
+      },
+      {
+        id: "easy-ctf",
+        icon: "🚩",
+        title: "EASY CTF CHALLENGES",
+        desc: "Beginner-friendly boxes — perfect for practice",
+        color: "#00ff88",
+        rooms: [
+          { name: "Offensive Security Intro", slug: "offensivesecurityintro", access: "free", diff: "easy" },
+          { name: "Defensive Security Intro", slug: "defensivesecurityintro", access: "free", diff: "easy" },
+          { name: "Pickle Rick", slug: "picklerick", access: "free", diff: "easy" },
+          { name: "Simple CTF", slug: "easyctf", access: "free", diff: "easy" },
+          { name: "LazyAdmin", slug: "lazyadmin", access: "free", diff: "easy" },
+          { name: "Anonforce", slug: "bsidesgtanonforce", access: "free", diff: "easy" },
+          { name: "Ignite", slug: "ignite", access: "free", diff: "easy" },
+          { name: "Wgel CTF", slug: "wgelctf", access: "free", diff: "easy" },
+          { name: "Kenobi", slug: "kenobi", access: "free", diff: "easy" },
+          { name: "Dav", slug: "bsidesgtdav", access: "free", diff: "easy" },
+          { name: "Ice", slug: "ice", access: "free", diff: "easy" },
+          { name: "Lian_Yu (Arrow CTF)", slug: "lianyu", access: "free", diff: "easy" },
+          { name: "The Cod Caper", slug: "thecodcaper", access: "free", diff: "easy" },
+          { name: "Blaster", slug: "blaster", access: "free", diff: "easy" },
+          { name: "Brooklyn Nine Nine", slug: "brooklynninenine", access: "free", diff: "easy" },
+          { name: "Year of the Rabbit", slug: "yearoftherabbit", access: "free", diff: "easy" },
+          { name: "Jack-of-All-Trades", slug: "jackofalltrades", access: "free", diff: "easy" },
+          { name: "Madness", slug: "madness", access: "free", diff: "easy" },
+          { name: "KoTH Food CTF", slug: "kothfoodctf", access: "free", diff: "easy" },
+          { name: "Easy Peasy", slug: "easypeasyctf", access: "free", diff: "easy" },
+          { name: "Tony the Tiger", slug: "tonythetiger", access: "free", diff: "easy" },
+          { name: "CTF Collection Vol.1", slug: "ctfcollectionvol1", access: "free", diff: "easy" },
+          { name: "Smag Grotto", slug: "smaggrotto", access: "free", diff: "easy" },
+          { name: "Couch", slug: "couch", access: "free", diff: "easy" },
+          { name: "Source", slug: "source", access: "free", diff: "easy" },
+          { name: "Overpass", slug: "overpass", access: "free", diff: "easy" },
+          { name: "Gotta Catch'em All!", slug: "pokemon", access: "free", diff: "easy" },
+          { name: "Bolt", slug: "bolt", access: "free", diff: "easy" },
+          { name: "Overpass 2 - Hacked", slug: "overpass2hacked", access: "free", diff: "easy" },
+          { name: "Kiba", slug: "kiba", access: "free", diff: "easy" },
+          { name: "Poster", slug: "poster", access: "free", diff: "easy" },
+          { name: "Chocolate Factory", slug: "chocolatefactory", access: "free", diff: "easy" },
+          { name: "Startup", slug: "startup", access: "free", diff: "easy" },
+          { name: "Chill Hack", slug: "chillhack", access: "free", diff: "easy" },
+          { name: "ColddBox: Easy", slug: "colddboxeasy", access: "free", diff: "easy" },
+          { name: "GLITCH", slug: "glitch", access: "free", diff: "easy" },
+          { name: "All in One", slug: "allinonemj", access: "free", diff: "easy" },
+          { name: "Archangel", slug: "archangel", access: "free", diff: "easy" },
+          { name: "Cyborg", slug: "cyborgt8", access: "free", diff: "easy" },
+          { name: "Lunizz CTF", slug: "lunizzctfnd", access: "free", diff: "easy" },
+          { name: "Badbyte", slug: "badbyte", access: "free", diff: "easy" },
+          { name: "Team", slug: "teamcw", access: "free", diff: "easy" },
+          { name: "VulnNet: Node", slug: "vulnnetnode", access: "free", diff: "easy" },
+          { name: "VulnNet: Internal", slug: "vulnnetinternal", access: "free", diff: "easy" },
+          { name: "Atlas", slug: "atlas", access: "free", diff: "easy" },
+          { name: "VulnNet: Roasted", slug: "vulnnetroasted", access: "free", diff: "easy" },
+          { name: "Cat Pictures", slug: "catpictures", access: "free", diff: "easy" },
+          { name: "Mustacchio", slug: "mustacchio", access: "free", diff: "easy" },
+          { name: "Thompson", slug: "bsidesgtthompson", access: "free", diff: "easy" },
+          { name: "Library", slug: "bsidesgtlibrary", access: "free", diff: "easy" },
+          { name: "GamingServer", slug: "gamingserver", access: "free", diff: "easy" },
+          { name: "Bounty Hacker", slug: "cowboyhacker", access: "free", diff: "easy" },
+          { name: "RootMe", slug: "rrootme", access: "free", diff: "easy" },
+          { name: "Anthem", slug: "anthem", access: "free", diff: "easy" },
+          { name: "Blueprint", slug: "blueprint", access: "free", diff: "easy" },
+          { name: "Blue (EternalBlue)", slug: "blue", access: "free", diff: "easy" },
+          { name: "Fowsniff CTF", slug: "ctf", access: "free", diff: "easy" },
+          { name: "Pyrat", slug: "pyrat", access: "free", diff: "easy" },
+          { name: "Cheese CTF", slug: "cheesectfv10", access: "free", diff: "easy" },
+          { name: "U.A. High School", slug: "yueiua", access: "free", diff: "easy" },
+          { name: "Joomify", slug: "joomify", access: "free", diff: "easy" },
+          { name: "Critical", slug: "critical", access: "free", diff: "easy" },
+          { name: "Publisher", slug: "publisher", access: "free", diff: "easy" },
+          { name: "Eviction", slug: "eviction", access: "free", diff: "easy" },
+          { name: "W1seGuy", slug: "w1seguy", access: "free", diff: "easy" },
+          { name: "mKingdom", slug: "mkingdom", access: "free", diff: "easy" },
+          { name: "CyberLens", slug: "cyberlensp6", access: "free", diff: "easy" },
+          { name: "TryHack3M: Bricks Heist", slug: "tryhack3mbricksheist", access: "free", diff: "easy" },
+          { name: "Creative", slug: "creative", access: "free", diff: "easy" },
+          { name: "Probe", slug: "probe", access: "free", diff: "easy" },
+          { name: "Dreaming", slug: "dreaming", access: "free", diff: "easy" },
+          { name: "Pyramid Of Pain", slug: "pyramidofpainax", access: "free", diff: "easy" },
+          { name: "The Witch's Cauldron", slug: "cauldron", access: "free", diff: "easy" },
+          { name: "Bulletproof Penguin", slug: "bppenguin", access: "free", diff: "easy" },
+          { name: "Hijack", slug: "hijack", access: "free", diff: "easy" },
+          { name: "Compiled", slug: "compiled", access: "free", diff: "easy" },
+          { name: "Super Secret Tip", slug: "supersecrettip", access: "free", diff: "easy" },
+          { name: "Lesson Learned?", slug: "lessonlearned", access: "free", diff: "easy" },
+          { name: "Grep", slug: "greprtp", access: "free", diff: "easy" },
+          { name: "Red", slug: "redisl33t", access: "free", diff: "easy" },
+          { name: "Snapped Phish-ing Line", slug: "snappedphishingline", access: "free", diff: "easy" },
+          { name: "Cat Pictures 2", slug: "catpictures2", access: "free", diff: "easy" },
+          { name: "Flip", slug: "flip", access: "free", diff: "easy" },
+          { name: "Valley!", slug: "valleype", access: "free", diff: "easy" },
+          { name: "Capture!", slug: "capture", access: "free", diff: "easy" },
+          { name: "Opacity", slug: "opacity", access: "free", diff: "easy" },
+          { name: "LookBack", slug: "lookback", access: "free", diff: "easy" },
+          { name: "Bugged", slug: "bugged", access: "free", diff: "easy" },
+          { name: "Confidential", slug: "confidential", access: "free", diff: "easy" },
+          { name: "OverlayFS - CVE-2021-3493", slug: "overlayfs", access: "free", diff: "easy" },
+          { name: "Tomghost", slug: "tomghost", access: "free", diff: "easy" },
+          { name: "magician", slug: "magician", access: "free", diff: "easy" },
+          { name: "JPGChat", slug: "jpgchat", access: "free", diff: "easy" },
+          { name: "Ninja Skills", slug: "ninjaskills", access: "free", diff: "easy" },
+          { name: "AttackerKB", slug: "attackerkb", access: "free", diff: "easy" },
+          { name: "Silver Platter", slug: "silverplatter", access: "free", diff: "easy" },
+          { name: "The Sticker Shop", slug: "thestickershop", access: "free", diff: "easy" },
+          { name: "Lookup", slug: "lookup", access: "free", diff: "easy" },
+          { name: "Whiterose", slug: "whiterose", access: "free", diff: "easy" },
+          { name: "Light", slug: "lightroom", access: "free", diff: "easy" },
+          { name: "Lo-Fi", slug: "lofi", access: "free", diff: "easy" },
+          { name: "Billing", slug: "billing", access: "free", diff: "easy" },
+          { name: "c4ptur3-th3-fl4g", slug: "c4ptur3th3fl4g", access: "free", diff: "easy" },
+          { name: "Security Footage", slug: "securityfootage", access: "free", diff: "easy" },
+          // Premium easy CTFs
+          { name: "HackPark", slug: "hackpark", access: "premium", diff: "easy" },
+          { name: "Steel Mountain", slug: "steelmountain", access: "premium", diff: "easy" },
+          { name: "Alfred", slug: "alfred", access: "premium", diff: "easy" },
+          { name: "Skynet", slug: "skynet", access: "premium", diff: "easy" },
+          { name: "Ninja Skills", slug: "ninjaskills", access: "free", diff: "easy" },
+        ]
+      },
+      {
+        id: "medium-ctf",
+        icon: "🚩",
+        title: "MEDIUM CTF CHALLENGES",
+        desc: "Intermediate boxes — enumeration, exploitation and post-exploitation",
+        color: "#ffdd00",
+        rooms: [
+          { name: "Dodge", slug: "dodge", access: "free", diff: "medium" },
+          { name: "Devie", slug: "devie", access: "free", diff: "medium" },
+          { name: "New Hire Old Artifacts", slug: "newhireoldartifacts", access: "free", diff: "medium" },
+          { name: "IronShade", slug: "ironshade", access: "free", diff: "medium" },
+          { name: "Basic Scripting", slug: "scripting", access: "free", diff: "medium" },
+          { name: "Mr Robot CTF", slug: "mrrobot", access: "free", diff: "medium" },
+          { name: "GoldenEye", slug: "goldeneye", access: "free", diff: "medium" },
+          { name: "Boiler CTF", slug: "boilerctf2", access: "free", diff: "medium" },
+          { name: "HA Joker CTF", slug: "jokerctf", access: "free", diff: "medium" },
+          { name: "Biohazard", slug: "biohazard", access: "free", diff: "medium" },
+          { name: "Willow", slug: "willow", access: "free", diff: "medium" },
+          { name: "The Marketplace", slug: "marketplace", access: "free", diff: "medium" },
+          { name: "Nax", slug: "nax", access: "free", diff: "medium" },
+          { name: "Mindgames", slug: "mindgames", access: "free", diff: "medium" },
+          { name: "Anonymous", slug: "anonymous", access: "free", diff: "medium" },
+          { name: "Blog", slug: "blog", access: "free", diff: "medium" },
+          { name: "Wonderland", slug: "wonderland", access: "free", diff: "medium" },
+          { name: "0day", slug: "0day", access: "free", diff: "medium" },
+          { name: "Develpy", slug: "bsidesgtdevelpy", access: "free", diff: "medium" },
+          { name: "CTF Collection Vol.2", slug: "ctfcollectionvol2", access: "free", diff: "medium" },
+          { name: "CMesS", slug: "cmess", access: "free", diff: "medium" },
+          { name: "Deja Vu", slug: "dejavu", access: "free", diff: "medium" },
+          { name: "hackerNote", slug: "hackernote", access: "free", diff: "medium" },
+          { name: "dogcat", slug: "dogcat", access: "free", diff: "medium" },
+          { name: "ConvertMyVideo", slug: "convertmyvideo", access: "free", diff: "medium" },
+          { name: "KoTH Hackers", slug: "kothhackers", access: "free", diff: "medium" },
+          { name: "Revenge", slug: "revenge", access: "free", diff: "medium" },
+          { name: "harder", slug: "harder", access: "free", diff: "medium" },
+          { name: "HaskHell", slug: "haskhell", access: "free", diff: "medium" },
+          { name: "Undiscovered", slug: "undiscoveredup", access: "free", diff: "medium" },
+          { name: "Break Out The Cage", slug: "breakoutthecage1", access: "free", diff: "medium" },
+          { name: "Looking Glass", slug: "lookingglass", access: "free", diff: "medium" },
+          { name: "Recovery", slug: "recovery", access: "free", diff: "medium" },
+          { name: "Relevant", slug: "relevant", access: "free", diff: "medium" },
+          { name: "Ghizer", slug: "ghizerctf", access: "free", diff: "medium" },
+          { name: "Mnemonic", slug: "mnemonic", access: "free", diff: "medium" },
+          { name: "The Blob Blog", slug: "theblobblog", access: "free", diff: "medium" },
+          { name: "Cooctus Stories", slug: "cooctusadventures", access: "free", diff: "medium" },
+          { name: "One Piece", slug: "ctfonepiece65", access: "free", diff: "medium" },
+          { name: "NerdHerd", slug: "nerdherd", access: "free", diff: "medium" },
+          { name: "The Server From Hell", slug: "theserverfromhell", access: "free", diff: "medium" },
+          { name: "Jacob the Boss", slug: "jacobtheboss", access: "free", diff: "medium" },
+          { name: "Unbaked Pie", slug: "unbakedpie", access: "free", diff: "medium" },
+          { name: "Bookstore", slug: "bookstoreoc", access: "free", diff: "medium" },
+          { name: "Overpass 3 - Hosting", slug: "overpass3hosting", access: "free", diff: "medium" },
+          { name: "battery", slug: "battery", access: "free", diff: "medium" },
+          { name: "Madeye's Castle", slug: "madeyescastle", access: "free", diff: "medium" },
+          { name: "En-pass", slug: "enpass", access: "free", diff: "medium" },
+          { name: "Sustah", slug: "sustah", access: "free", diff: "medium" },
+          { name: "KaffeeSec - SoMeSINT", slug: "somesint", access: "free", diff: "medium" },
+          { name: "Tokyo Ghoul", slug: "tokyoghoul666", access: "free", diff: "medium" },
+          { name: "Watcher", slug: "watcher", access: "free", diff: "medium" },
+          { name: "broker", slug: "broker", access: "free", diff: "medium" },
+          { name: "Inferno", slug: "inferno", access: "free", diff: "medium" },
+          { name: "VulnNet: dotpy", slug: "vulnnetdotpy", access: "free", diff: "medium" },
+          { name: "Wekor", slug: "wekorra", access: "free", diff: "medium" },
+          { name: "SafeZone", slug: "safezone", access: "free", diff: "medium" },
+          { name: "NahamStore", slug: "nahamstore", access: "free", diff: "medium" },
+          { name: "Sweettooth Inc.", slug: "sweettoothinc", access: "free", diff: "medium" },
+          { name: "Red Team OPSEC", slug: "opsec", access: "free", diff: "medium" },
+          { name: "CMSpit", slug: "cmspit", access: "free", diff: "medium" },
+          { name: "Super-Spam", slug: "superspamr", access: "free", diff: "medium" },
+          { name: "Debug", slug: "debug", access: "free", diff: "medium" },
+          { name: "Cold VVars", slug: "coldvvars", access: "free", diff: "medium" },
+          { name: "Metamorphosis", slug: "metamorphosis", access: "free", diff: "medium" },
+          { name: "SQHell", slug: "sqhell", access: "free", diff: "medium" },
+          { name: "Fortress", slug: "fortress", access: "free", diff: "medium" },
+          { name: "CyberCrafted", slug: "cybercrafted", access: "free", diff: "medium" },
+          { name: "Road", slug: "road", access: "free", diff: "medium" },
+          { name: "Backtrack", slug: "backtrack", access: "free", diff: "medium" },
+          { name: "The London Bridge", slug: "thelondonbridge", access: "free", diff: "medium" },
+          { name: "Breakme", slug: "breakmenu", access: "free", diff: "medium" },
+          { name: "Block", slug: "blockroom", access: "free", diff: "medium" },
+          { name: "APIWizards Breach", slug: "apiwizardsbreach", access: "free", diff: "medium" },
+          { name: "New York Flankees", slug: "thenewyorkflankees", access: "free", diff: "medium" },
+          { name: "Airplane", slug: "airplane", access: "free", diff: "medium" },
+          { name: "Clocky", slug: "clocky", access: "free", diff: "medium" },
+          { name: "Hack Smarter Security", slug: "hacksmartersecurity", access: "free", diff: "medium" },
+          { name: "Kitty", slug: "kitty", access: "free", diff: "medium" },
+          { name: "Umbrella", slug: "umbrella", access: "free", diff: "medium" },
+          { name: "WhyHackMe", slug: "whyhackme", access: "free", diff: "medium" },
+          { name: "Stealth", slug: "stealth", access: "free", diff: "medium" },
+          { name: "Athena", slug: "4th3n4", access: "free", diff: "medium" },
+          { name: "Crylo", slug: "crylo4a", access: "free", diff: "medium" },
+          { name: "Forgotten Implant", slug: "forgottenimplant", access: "free", diff: "medium" },
+          { name: "Race Conditions", slug: "raceconditions", access: "free", diff: "medium" },
+          { name: "Weasel", slug: "weasel", access: "free", diff: "medium" },
+          { name: "Prioritise", slug: "prioritise", access: "free", diff: "medium" },
+          { name: "Boogeyman 1", slug: "boogeyman1", access: "free", diff: "medium" },
+          { name: "Unattended", slug: "unattended", access: "free", diff: "medium" },
+          { name: "StuxCTF", slug: "stuxctf", access: "free", diff: "medium" },
+          { name: "Hackfinity Battle", slug: "HackfinityBattle", access: "free", diff: "medium" },
+          { name: "Rabbit Store", slug: "rabbitstore", access: "free", diff: "medium" },
+          { name: "Smol", slug: "smol", access: "free", diff: "medium" },
+          { name: "Mayhem", slug: "mayhemroom", access: "free", diff: "medium" },
+          { name: "The Impossible Challenge", slug: "theimpossiblechallenge", access: "free", diff: "medium" },
+          { name: "Game Zone", slug: "gamezone", access: "premium", diff: "medium" },
+          { name: "Corp (AD)", slug: "corp", access: "premium", diff: "medium" },
+        ]
+      },
+      {
+        id: "hard-ctf",
+        icon: "🚩",
+        title: "HARD CTF CHALLENGES",
+        desc: "Advanced exploitation, chained vulnerabilities, complex enumeration",
+        color: "#ff3355",
+        rooms: [
+          { name: "Jurassic Park", slug: "jurassicpark", access: "free", diff: "hard" },
+          { name: "Dead End?", slug: "deadend", access: "free", diff: "hard" },
+          { name: "Brainpan 1", slug: "brainpan", access: "free", diff: "hard" },
+          { name: "Borderlands", slug: "borderlands", access: "free", diff: "hard" },
+          { name: "hc0n Christmas CTF", slug: "hc0nchristmasctf", access: "free", diff: "hard" },
+          { name: "Daily Bugle", slug: "dailybugle", access: "free", diff: "hard" },
+          { name: "Retro", slug: "retro", access: "free", diff: "hard" },
+          { name: "Racetrack Bank", slug: "racetrackbank", access: "free", diff: "hard" },
+          { name: "Dave's Blog", slug: "davesblog", access: "free", diff: "hard" },
+          { name: "CherryBlossom", slug: "cherryblossom", access: "free", diff: "hard" },
+          { name: "CCT2019", slug: "cct2019", access: "free", diff: "hard" },
+          { name: "Iron Corp", slug: "ironcorp", access: "free", diff: "hard" },
+          { name: "Carpe Diem 1", slug: "carpediem1", access: "free", diff: "hard" },
+          { name: "Ra", slug: "ra", access: "free", diff: "hard" },
+          { name: "Year of the Fox", slug: "yotf", access: "free", diff: "hard" },
+          { name: "For Business Reasons", slug: "forbusinessreasons", access: "free", diff: "hard" },
+          { name: "Anonymous Playground", slug: "anonymousplayground", access: "free", diff: "hard" },
+          { name: "Misguided Ghosts", slug: "misguidedghosts", access: "free", diff: "hard" },
+          { name: "Theseus", slug: "theseus", access: "free", diff: "hard" },
+          { name: "Internal", slug: "internal", access: "free", diff: "hard" },
+          { name: "Year of the Dog", slug: "yearofthedog", access: "free", diff: "hard" },
+          { name: "Year of the Owl", slug: "yearoftheowl", access: "free", diff: "hard" },
+          { name: "Year of the Pig", slug: "yearofthepig", access: "free", diff: "hard" },
+          { name: "envizon", slug: "envizon", access: "free", diff: "hard" },
+          { name: "GameBuzz", slug: "gamebuzz", access: "free", diff: "hard" },
+          { name: "Fusion Corp", slug: "fusioncorp", access: "free", diff: "hard" },
+          { name: "Crocc Crew", slug: "crocccrew", access: "free", diff: "hard" },
+          { name: "Uranium CTF", slug: "uranium", access: "free", diff: "hard" },
+          { name: "Year of the Jellyfish", slug: "yearofthejellyfish", access: "free", diff: "hard" },
+          { name: "Rocket", slug: "rocket", access: "free", diff: "hard" },
+          { name: "Squid Game", slug: "squidgameroom", access: "free", diff: "hard" },
+          { name: "EnterPrize", slug: "enterprize", access: "free", diff: "hard" },
+          { name: "Different CTF", slug: "adana", access: "free", diff: "hard" },
+          { name: "VulnNet: dotjar", slug: "vulnnetdotjar", access: "free", diff: "hard" },
+          { name: "M4tr1x: Exit Denied", slug: "m4tr1xexitdenied", access: "free", diff: "hard" },
+          { name: "Shaker", slug: "shaker", access: "free", diff: "hard" },
+          { name: "CERTain Doom", slug: "certaindoom", access: "free", diff: "hard" },
+          { name: "Capture Returns", slug: "capturereturns", access: "free", diff: "hard" },
+          { name: "Chrome", slug: "chrome", access: "free", diff: "hard" },
+          { name: "Reset", slug: "resetui", access: "free", diff: "hard" },
+          { name: "Motunui", slug: "motunui", access: "free", diff: "hard" },
+          { name: "Spring", slug: "spring", access: "free", diff: "hard" },
+          { name: "Cicada-3301 Vol:1", slug: "cicada3301vol1", access: "free", diff: "hard" },
+          { name: "Enterprise", slug: "enterprise", access: "free", diff: "hard" },
+          { name: "Hackfinity Battle Hard", slug: "HackfinityBattle", access: "free", diff: "hard" },
+          { name: "Holo Network", slug: "hololive", access: "premium", diff: "hard" },
+          { name: "RA2", slug: "ra2", access: "premium", diff: "hard" },
+        ]
+      },
+      {
+        id: "insane",
+        icon: "💀",
+        title: "INSANE CTF CHALLENGES",
+        desc: "Elite only — these are the only insane level labs on TryHackMe",
+        color: "#aa55ff",
+        rooms: [
+          { name: "Osiris", slug: "osiris", access: "free", diff: "insane" },
+          { name: "CCT2019", slug: "cct2019", access: "free", diff: "insane" },
+          { name: "Crocc Crew", slug: "crocccrew", access: "free", diff: "insane" },
+          { name: "Frosteau Busy with Vim", slug: "busyvimfrosteau", access: "free", diff: "insane" },
+          { name: "You're in a cave", slug: "inacave", access: "free", diff: "insane" },
+          { name: "Theseus", slug: "theseus", access: "free", diff: "insane" },
+        ]
+      },
+      {
+        id: "events",
+        icon: "🎉",
+        title: "SPECIAL EVENTS & ADVENT OF CYBER",
+        desc: "Annual events with daily beginner-friendly challenges",
+        color: "#00ff88",
+        rooms: [
+          { name: "25 Days of Cyber Security (2019)", slug: "learncyberin25days", access: "free", diff: "easy" },
+          { name: "Advent of Cyber 1 [2019]", slug: "25daysofchristmas", access: "free", diff: "easy" },
+          { name: "Advent of Cyber 2 [2020]", slug: "adventofcyber2", access: "free", diff: "easy" },
+          { name: "Advent of Cyber 3 (2021)", slug: "adventofcyber3", access: "free", diff: "easy" },
+          { name: "Advent of Cyber 2022", slug: "adventofcyber4", access: "free", diff: "easy" },
+          { name: "Advent of Cyber 2023", slug: "adventofcyber2023", access: "free", diff: "easy" },
+          { name: "Advent of Cyber '23 Side Quest", slug: "adventofcyber23sidequest", access: "free", diff: "medium" },
+          { name: "Advent of Cyber 2024", slug: "adventofcyber2024", access: "free", diff: "easy" },
+          { name: "Cyber Scotland 2021", slug: "cyberweek2021", access: "free", diff: "easy" },
+          { name: "Learn and Win Prizes", slug: "tickets1", access: "free", diff: "easy" },
+        ]
+      },
+      {
+        id: "misc",
+        icon: "🧪",
+        title: "MISC & OTHER LABS",
+        desc: "Unique, specialized and experimental rooms",
+        color: "#00d4ff",
+        rooms: [
+          { name: "Tor", slug: "torforbeginners", access: "free", diff: "easy" },
+          { name: "Jupyter 101", slug: "jupyter101", access: "free", diff: "easy" },
+          { name: "MITRE", slug: "mitre", access: "free", diff: "easy" },
+          { name: "Git Happens", slug: "githappens", access: "free", diff: "easy" },
+          { name: "OpenVAS", slug: "openvas", access: "free", diff: "easy" },
+          { name: "Android Hacking 101", slug: "androidhacking101", access: "free", diff: "easy" },
+          { name: "Wifi Hacking 101", slug: "wifihacking101", access: "free", diff: "easy" },
+          { name: "Geolocating Images", slug: "geolocatingimages", access: "free", diff: "easy" },
+          { name: "Writing Pentest Reports", slug: "writingpentestreports", access: "free", diff: "easy" },
+          { name: "Git and Crumpets", slug: "gitandcrumpets", access: "free", diff: "medium" },
+          { name: "Linux Function Hooking", slug: "linuxfunctionhooking", access: "free", diff: "medium" },
+          { name: "Hacking with PowerShell", slug: "powershell", access: "free", diff: "medium" },
+          { name: "DLL Hijacking", slug: "dllhijacking", access: "free", diff: "medium" },
+          { name: "Hacking Hadoop", slug: "hackinghadoop", access: "free", diff: "medium" },
+          { name: "Volt Typhoon", slug: "volttyphoon", access: "free", diff: "medium" },
+          { name: "Outlook NTLM Leak", slug: "outlookntlmleak", access: "free", diff: "medium" },
+          { name: "Supply Chain Attack: Lottie", slug: "supplychainattacks", access: "free", diff: "medium" },
+          { name: "REvil Corp", slug: "revilcorp", access: "free", diff: "medium" },
+          { name: "toc2", slug: "toc2", access: "free", diff: "medium" },
+          { name: "Binary Heaven", slug: "binaryheaven", access: "free", diff: "medium" },
+          { name: "Hip Flask", slug: "hipflask", access: "free", diff: "medium" },
+          { name: "Bypass Disable Functions", slug: "bypassdisablefunctions", access: "free", diff: "medium" },
+          { name: "Linux Backdoors", slug: "linuxbackdoors", access: "free", diff: "medium" },
+          { name: "Insecure Randomness", slug: "insecurerandomness", access: "free", diff: "medium" },
+          { name: "Bypass Really Simple Security", slug: "bypassreallysimplesecurity", access: "free", diff: "medium" },
+          { name: "DNS Manipulation", slug: "dnsmanipulation", access: "free", diff: "medium" },
+          { name: "Attacking ICS Plant #1", slug: "attackingics1", access: "free", diff: "medium" },
+          { name: "Printer Hacking 101", slug: "printerhacking101", access: "free", diff: "medium" },
+          { name: "Attacking ICS Plant #2", slug: "attackingics2", access: "free", diff: "hard" },
+        ]
+      }
+    ];
+
+    // Render everything
+    function getDiffClass(diff) {
+      return { info: 'diff-info', easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard', insane: 'diff-insane' }[diff] || 'diff-easy';
+    }
+
+    function getDiffLabel(diff) {
+      return { info: '🔵 INFO', easy: '🟢 EASY', medium: '🟡 MEDIUM', hard: '🔴 HARD', insane: '💀 INSANE' }[diff] || '🟢 EASY';
+    }
+
+    function getAccessBadge(access) {
+      if (access === 'free') return '<span class="badge badge-free">✅ FREE</span>';
+      if (access === 'premium') return '<span class="badge badge-premium">💎 PREMIUM</span>';
+      return '<span class="badge badge-uncertain">⚠️ FREE*</span>';
+    }
+
+    function buildTables() {
+      const container = document.getElementById('labsContainer');
+      let totalFree = 0, totalPremium = 0, totalAll = 0;
+
+      CATEGORIES.forEach(cat => {
+        const section = document.createElement('div');
+        section.className = 'category-section';
+        section.id = 'cat-' + cat.id;
+
+        const freeCount = cat.rooms.filter(r => r.access === 'free').length;
+        const premiumCount = cat.rooms.filter(r => r.access === 'premium').length;
+        const uncertainCount = cat.rooms.filter(r => r.access === 'uncertain').length;
+        totalFree += freeCount + uncertainCount;
+        totalPremium += premiumCount;
+        totalAll += cat.rooms.length;
+
+        section.innerHTML = `
+      <div class="category-header" onclick="toggleCat(this)">
+        <div class="cat-left">
+          <div class="cat-icon" style="background:linear-gradient(135deg,${cat.color}22,${cat.color}44);border:1px solid ${cat.color}44">${cat.icon}</div>
+          <div>
+            <div class="cat-title">${cat.title}</div>
+            <div class="cat-desc">${cat.desc}</div>
+          </div>
+        </div>
+        <div class="cat-right">
+          <span class="cat-count" style="color:${cat.color};border-color:${cat.color}44;background:${cat.color}11">${cat.rooms.length} rooms</span>
+          <span class="cat-count" style="color:#00ff88;border-color:#00ff8844;background:#00ff8811">${freeCount} FREE</span>
+          ${premiumCount > 0 ? `<span class="cat-count" style="color:#ff8800;border-color:#ff880044;background:#ff880011">${premiumCount} 💎</span>` : ''}
+          <span class="cat-toggle">▼</span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Room Name</th>
+              <th>Access</th>
+              <th>Difficulty</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${cat.rooms.map((room, i) => `
+              <tr class="lab-row" 
+                  data-name="${room.name.toLowerCase()}" 
+                  data-access="${room.access}" 
+                  data-diff="${room.diff}">
+                <td class="td-num">${String(i + 1).padStart(2, '0')}</td>
+                <td class="td-name">
+                  <a href="https://tryhackme.com/room/${room.slug}" target="_blank" rel="noopener">${room.name}</a>
+                </td>
+                <td>${getAccessBadge(room.access)}</td>
+                <td><span class="diff ${getDiffClass(room.diff)}">${getDiffLabel(room.diff)}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+        container.appendChild(section);
+      });
+
+      document.getElementById('totalCount').textContent = totalAll + '+';
+      document.getElementById('freeCount').textContent = totalFree + '+';
+      document.getElementById('premiumCount').textContent = totalPremium + '+';
+      updateVisible();
+    }
+
+    function toggleCat(header) {
+      header.parentElement.classList.toggle('collapsed');
+    }
+
+    // Filter state
+    let activeAccess = 'all';
+    let activeDiff = 'all';
+    let searchTerm = '';
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const f = btn.dataset.filter;
+        if (['all', 'free', 'premium'].includes(f)) {
+          document.querySelectorAll('.filter-btn').forEach(b => {
+            if (['all', 'free', 'premium'].includes(b.dataset.filter)) b.classList.remove('active');
+          });
+          activeAccess = f;
+        } else {
+          const diffBtns = document.querySelectorAll('.filter-btn:not([data-filter="all"]):not([data-filter="free"]):not([data-filter="premium"])');
+          if (btn.classList.contains('active')) {
+            btn.classList.remove('active');
+            activeDiff = 'all';
+          } else {
+            diffBtns.forEach(b => b.classList.remove('active'));
+            activeDiff = f;
+          }
+        }
+        btn.classList.toggle('active', activeAccess === f || activeDiff === f);
+        if (f === 'all') { btn.classList.add('active'); activeDiff = 'all'; }
+        applyFilters();
+      });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', e => {
+      searchTerm = e.target.value.toLowerCase().trim();
+      applyFilters();
+    });
+
+    function applyFilters() {
+      const rows = document.querySelectorAll('.lab-row');
+      let visible = 0;
+
+      document.querySelectorAll('.category-section').forEach(sec => {
+        let secVisible = 0;
+        sec.querySelectorAll('.lab-row').forEach(row => {
+          const nameMatch = !searchTerm || row.dataset.name.includes(searchTerm);
+          const accessMatch = activeAccess === 'all' || row.dataset.access === activeAccess;
+          const diffMatch = activeDiff === 'all' || row.dataset.diff === activeDiff;
+
+          if (nameMatch && accessMatch && diffMatch) {
+            row.classList.remove('hidden');
+            secVisible++;
+            visible++;
+          } else {
+            row.classList.add('hidden');
+          }
+        });
+
+        sec.style.display = secVisible === 0 ? 'none' : 'block';
+        if (secVisible > 0 && sec.classList.contains('collapsed') && (searchTerm || activeAccess !== 'all' || activeDiff !== 'all')) {
+          sec.classList.remove('collapsed');
+        }
+      });
+
+      document.getElementById('visibleCount').textContent = visible;
+      const term = searchTerm ? `"${searchTerm}"` : 'all filters';
+      document.getElementById('resultInfo').textContent = `${visible} labs matching ${term}`;
+      document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    function updateVisible() {
+      const total = document.querySelectorAll('.lab-row').length;
+      document.getElementById('visibleCount').textContent = total;
+      document.getElementById('resultInfo').textContent = 'all labs';
+    }
+
+    buildTables();
+  </script>
+</body>
+
+</html>
